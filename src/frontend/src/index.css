@@ -1,0 +1,1529 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Import Gotham font from Google Fonts with fallbacks */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Custom color palette */
+:root {
+  --color-primary: #ffffff;
+  --color-secondary: #11454c;
+  --color-secondary-light: #6b7280;
+  --color-neutral-light: #bee4ea;
+  --color-accent: #0b9195;
+  --color-accent-dark: #087579;
+}
+
+/* Custom font family */
+.font-gotham {
+  font-family: 'Gotham', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Base styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  color: var(--color-secondary);
+  background-color: var(--color-primary);
+}
+
+/* Tailwind custom color classes */
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-secondary-light {
+  color: var(--color-secondary-light);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-accent-dark {
+  color: var(--color-accent-dark);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-neutral-light {
+  background-color: var(--color-neutral-light);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.bg-accent-dark {
+  background-color: var(--color-accent-dark);
+}
+
+.border-neutral-light {
+  border-color: var(--color-neutral-light);
+}
+
+.border-accent {
+  border-color: var(--color-accent);
+}
+
+.hover\:text-accent:hover {
+  color: var(--color-accent);
+}
+
+.hover\:text-accent-dark:hover {
+  color: var(--color-accent-dark);
+}
+
+.hover\:bg-neutral-light:hover {
+  background-color: var(--color-neutral-light);
+}
+
+.hover\:bg-accent:hover {
+  background-color: var(--color-accent);
+}
+
+.hover\:bg-accent-dark:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.hover\:border-accent:hover {
+  border-color: var(--color-accent);
+}
+
+.focus\:ring-accent:focus {
+  --tw-ring-color: var(--color-accent);
+}
+
+/* Custom utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Touch manipulation for better mobile interaction */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Touch target for better mobile usability */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dark);
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2;
+}
+
+/* Button hover effects */
+.btn-hover-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(11, 145, 149, 0.15);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(11, 145, 149, 0.1);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Enhanced bounce animation for result screen */
+@keyframes celebratory-bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translate3d(0,0,0);
+  }
+  40%, 43% {
+    transform: translate3d(0, -15px, 0);
+  }
+  70% {
+    transform: translate3d(0, -7px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+.animate-bounce {
+  animation: celebratory-bounce 2s ease-in-out infinite;
+}
+
+/* Pulse animation for sparkles */
+@keyframes gentle-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse {
+  animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+/* Responsive typography */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, var(--color-neutral-light) 25%, #a8d5db 50%, var(--color-neutral-light) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Form styles */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(11, 145, 149, 0.1);
+}
+
+/* Toast notification styles */
+.toast-success {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.toast-error {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Prose styles for blog content */
+.prose {
+  max-width: none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--color-secondary);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-size: 1.875rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+  color: var(--color-secondary-light);
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-accent);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--color-secondary-light);
+}
+
+.prose ul,
+.prose ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: var(--color-accent-dark);
+}
+
+/* Enhanced Mobile Header and Logo Styles */
+@media (max-width: 768px) {
+  /* Header container improvements */
+  header .flex.justify-between {
+    align-items: center;
+    gap: 8px;
+    min-height: 64px; /* Ensure consistent header height */
+  }
+  
+  /* Logo container - guaranteed visibility and proper sizing */
+  .logo-container {
+    display: flex !important;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 0;
+    max-width: 140px; /* Prevent logo from taking too much space */
+  }
+  
+  .logo-image {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: 32px !important; /* Fixed height for mobile */
+    width: auto !important;
+    max-width: 120px !important;
+    object-fit: contain !important;
+    object-position: left center !important;
+  }
+  
+  .logo-placeholder {
+    height: 32px !important;
+    width: 32px !important;
+    flex-shrink: 0;
+  }
+  
+  /* Mobile header right side - guaranteed login button visibility and admin shortcut */
+  .mobile-header-right {
+    display: flex !important;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 8px;
+    min-width: fit-content;
+  }
+  
+  /* Mobile admin button - always visible when admin is logged in */
+  .mobile-admin-button {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+    /* Ensure it's always visible when admin is logged in */
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .mobile-login-button-container {
+    display: flex !important;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: fit-content;
+    z-index: 10;
+    position: relative;
+  }
+  
+  /* Ensure login button has proper touch targets and visibility */
+  .mobile-login-button-container button {
+    min-height: 40px !important;
+    min-width: 60px !important;
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+    white-space: nowrap;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Mobile menu button */
+  .mobile-menu-button {
+    flex-shrink: 0;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Instagram Feed - Completely Redesigned for Reliable Display */
+.instagram-feed-section {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  position: relative;
+  /* Ensure proper containment */
+  contain: layout style;
+  /* Force display */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Clean, modern grid layout */
+.instagram-feed-section .grid {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 1.5rem;
+  /* Force visibility */
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Responsive grid columns */
+@media (min-width: 640px) {
+  .instagram-feed-section .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .instagram-feed-section .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Instagram card styling - Clean and modern */
+.instagram-feed-section .bg-white {
+  background: white !important;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  width: 100% !important;
+  max-width: 100% !important;
+  /* Force display */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  /* Enhanced mobile touch handling */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+}
+
+.instagram-feed-section .bg-white:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Media container - Reliable display */
+.instagram-feed-section .relative.h-64 {
+  position: relative;
+  height: 16rem; /* 256px */
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--color-neutral-light);
+  /* Force display */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Image styling - Guaranteed visibility */
+.instagram-feed-section img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: transform 0.3s ease;
+  /* Enhanced mobile image rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Video styling - Guaranteed visibility */
+.instagram-feed-section video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  /* Enhanced mobile video support */
+  -webkit-playsinline: true;
+  playsinline: true;
+}
+
+/* Video controls */
+.instagram-feed-section .absolute.inset-0 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  /* Enhanced mobile touch handling */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.instagram-feed-section .absolute.inset-0:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Badge styling */
+.instagram-feed-section .absolute.top-3 {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Content area */
+.instagram-feed-section .p-4 {
+  padding: 1rem;
+  width: 100%;
+  /* Force display */
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Caption styling */
+.instagram-feed-section .text-sm.mb-3 {
+  color: var(--color-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  /* Enhanced mobile text rendering */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* Footer area */
+.instagram-feed-section .flex.items-center.justify-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+}
+
+/* Date and link styling */
+.instagram-feed-section .text-xs {
+  font-size: 0.75rem;
+  color: var(--color-secondary-light);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.instagram-feed-section .text-accent {
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  min-height: 24px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.instagram-feed-section .text-accent:hover {
+  color: var(--color-accent-dark);
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .instagram-feed-section {
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    position: relative;
+    /* Force display on mobile */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .instagram-feed-section .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    /* Force visibility on mobile */
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .instagram-feed-section .bg-white {
+    margin: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 0.5rem;
+    /* Enhanced mobile performance */
+    will-change: transform;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    /* Force display on mobile */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .instagram-feed-section .relative.h-64 {
+    height: 280px;
+    min-height: 280px;
+    /* Force display on mobile */
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .instagram-feed-section .p-4 {
+    padding: 0.875rem;
+    /* Force display on mobile */
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Enhanced mobile touch area for video controls */
+  .instagram-feed-section .absolute.inset-0 {
+    min-width: 60px;
+    min-height: 60px;
+    padding: 8px;
+  }
+}
+
+/* Enhanced touch handling for mobile devices */
+@media (hover: none) and (pointer: coarse) {
+  .instagram-feed-section .bg-white:hover {
+    transform: none;
+  }
+  
+  .instagram-feed-section .bg-white:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+  
+  .instagram-feed-section .absolute.inset-0:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .instagram-feed-section .absolute.inset-0:active {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* iOS Safari specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .instagram-feed-section .bg-white {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  .instagram-feed-section img {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .instagram-feed-section video {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-playsinline: true;
+    playsinline: true;
+  }
+}
+
+/* Android Chrome specific fixes */
+@supports (display: -webkit-box) {
+  .instagram-feed-section .bg-white {
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+  }
+  
+  .instagram-feed-section .absolute.inset-0 {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Force all Instagram content to be visible on all devices */
+.instagram-feed-section img,
+.instagram-feed-section video,
+.instagram-feed-section .relative,
+.instagram-feed-section .bg-white {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Prevent horizontal scrolling issues */
+.instagram-feed-section,
+.instagram-feed-section .grid,
+.instagram-feed-section .bg-white {
+  max-width: 100%;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Enhanced mobile viewport handling */
+@media screen and (max-width: 640px) {
+  .instagram-feed-section {
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .instagram-feed-section .relative.h-64 {
+    contain: layout style;
+  }
+  
+  .instagram-feed-section .grid {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Cross-browser mobile compatibility */
+@media (max-device-width: 768px) {
+  .instagram-feed-section .bg-white {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  .instagram-feed-section img {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  .instagram-feed-section video {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+/* Hero Section Mobile Enhancements */
+@media (max-width: 768px) {
+  /* Hero image mobile container - guaranteed visibility */
+  .hero-image-mobile {
+    width: 100% !important;
+    display: block !important;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-neutral-light);
+    min-height: 300px !important;
+    max-height: 50vh !important;
+    height: 40vh !important;
+  }
+  
+  .hero-image-mobile img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Hero content mobile */
+  .hero-content-mobile {
+    width: 100%;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+}
+
+/* Tablet Hero Section */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-image-tablet {
+    height: 60vh !important;
+    min-height: 400px !important;
+    max-height: 500px !important;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-neutral-light);
+  }
+  
+  .hero-image-tablet img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+}
+
+/* Responsive hero section improvements */
+@media (min-width: 1024px) {
+  /* Desktop: Ensure perfect 50/50 split */
+  .hero-split {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .hero-image-half,
+  .hero-content-half {
+    width: 50%;
+    flex-shrink: 0;
+  }
+}
+
+/* Mobile landscape orientation */
+@media (max-width: 767px) and (orientation: landscape) {
+  .hero-image-mobile {
+    height: 35vh !important;
+    min-height: 250px !important;
+    max-height: 35vh !important;
+  }
+  
+  .hero-content-mobile {
+    min-height: 65vh;
+    padding: 1rem;
+  }
+  
+  /* Adjust header for landscape */
+  header .flex.justify-between {
+    min-height: 56px;
+  }
+  
+  .logo-image {
+    height: 28px !important;
+    max-width: 100px !important;
+  }
+  
+  .mobile-login-button-container button {
+    min-height: 36px !important;
+    padding: 4px 10px !important;
+    font-size: 13px !important;
+  }
+  
+  .mobile-admin-button {
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+  .logo-image {
+    height: 28px !important;
+    max-width: 100px !important;
+  }
+  
+  .mobile-login-button-container button {
+    min-height: 36px !important;
+    min-width: 55px !important;
+    padding: 5px 10px !important;
+    font-size: 13px !important;
+  }
+  
+  .mobile-admin-button {
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+  
+  .hero-image-mobile {
+    min-height: 280px !important;
+    height: 35vh !important;
+  }
+  
+  .instagram-feed-section .relative.h-64 {
+    height: 260px !important;
+    min-height: 260px !important;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 360px) {
+  .logo-image {
+    height: 26px !important;
+    max-width: 90px !important;
+  }
+  
+  .mobile-login-button-container button {
+    min-height: 34px !important;
+    min-width: 50px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+  }
+  
+  .mobile-admin-button {
+    min-width: 38px !important;
+    min-height: 38px !important;
+  }
+  
+  .hero-image-mobile {
+    min-height: 260px !important;
+    height: 32vh !important;
+  }
+  
+  .instagram-feed-section .relative.h-64 {
+    height: 240px !important;
+    min-height: 240px !important;
+  }
+}
+
+/* High DPI mobile devices */
+@media (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+  .logo-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+  
+  .mobile-login-button-container button {
+    border-width: 1px;
+    font-weight: 500;
+  }
+  
+  .mobile-admin-button {
+    border-width: 1px;
+  }
+  
+  .instagram-feed-section img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Force visibility and prevent layout issues on all mobile devices */
+@media (max-width: 768px) {
+  /* Ensure all critical elements are always visible */
+  .logo-container,
+  .mobile-header-right,
+  .mobile-login-button-container,
+  .mobile-admin-button,
+  .hero-image-mobile,
+  .instagram-feed-section {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Prevent any overflow issues */
+  header {
+    overflow: visible;
+  }
+  
+  header .max-w-7xl {
+    overflow: visible;
+  }
+  
+  /* Instagram feed mobile scrolling */
+  .instagram-feed-section {
+    overflow-x: visible;
+    overflow-y: visible;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Enhanced mobile quiz styles */
+@media (max-width: 640px) {
+  /* Quiz specific mobile improvements */
+  .quiz-mobile-container {
+    padding: 12px;
+  }
+  
+  .quiz-mobile-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .quiz-mobile-button {
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 48px;
+    border-radius: 12px;
+  }
+  
+  .quiz-mobile-title {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  
+  .quiz-mobile-question {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  
+  /* Better touch targets for mobile */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Enhanced quiz option buttons for mobile */
+  .quiz-option-button {
+    /* Force clean state on mobile */
+    background: white !important;
+    border: 2px solid var(--color-neutral-light) !important;
+    color: var(--color-secondary) !important;
+    
+    /* Better mobile touch handling */
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+    tap-highlight-color: rgba(11, 145, 149, 0.1);
+  }
+  
+  /* Remove any hover effects on mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .quiz-option-button:hover {
+      background-color: white !important;
+      border-color: var(--color-neutral-light) !important;
+      color: var(--color-secondary) !important;
+    }
+  }
+}
+
+/* Quiz-specific styles for clean state management */
+.quiz-option-button {
+  /* Ensure clean initial state */
+  background-color: white !important;
+  border-color: var(--color-neutral-light) !important;
+  color: var(--color-secondary) !important;
+  
+  /* Remove any persistent hover/active states */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.quiz-option-clean {
+  /* Force clean state on new questions */
+  background-color: white !important;
+  border-color: var(--color-neutral-light) !important;
+  color: var(--color-secondary) !important;
+}
+
+/* Enhanced hover states that reset properly */
+.quiz-option-button:hover:not(:disabled) {
+  border-color: var(--color-accent) !important;
+  background-color: rgba(11, 145, 149, 0.05) !important;
+}
+
+.quiz-option-button:active:not(:disabled) {
+  background-color: rgba(11, 145, 149, 0.1) !important;
+}
+
+/* Mobile-specific quiz button improvements */
+@media (max-width: 768px) {
+  .quiz-option-button {
+    /* Enhanced touch handling */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+    
+    /* Ensure proper touch target size */
+    min-height: 48px;
+    
+    /* Remove any lingering states */
+    outline: none;
+  }
+  
+  /* Remove hover states on touch devices */
+  .quiz-option-button:hover {
+    background-color: white !important;
+    border-color: var(--color-neutral-light) !important;
+  }
+  
+  /* Only show active state on actual touch */
+  .quiz-option-button:active:not(:disabled) {
+    background-color: rgba(11, 145, 149, 0.1) !important;
+    border-color: var(--color-accent) !important;
+  }
+}
+
+/* Trip Randomizer specific styles */
+.trip-randomizer-tile {
+  transition: transform 0.3s ease-in-out;
+}
+
+.trip-randomizer-swipe-container {
+  overflow: hidden;
+  position: relative;
+}
+
+.trip-randomizer-navigation {
+  touch-action: manipulation;
+}
+
+/* Trip randomizer mobile optimizations */
+@media (max-width: 640px) {
+  .trip-randomizer-form {
+    padding: 1rem;
+  }
+  
+  .trip-randomizer-tile {
+    padding: 1rem;
+  }
+  
+  .trip-randomizer-navigation button {
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+}
+
+/* Smooth transitions for responsive changes */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-section {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .travel-tools-grid {
+    transition: grid-template-columns 0.3s ease-in-out, gap 0.3s ease-in-out;
+  }
+  
+  /* Quiz button transitions */
+  .quiz-button-transition {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .quiz-option-button {
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  }
+
+  /* Enhanced result screen animations */
+  .result-card-enter {
+    animation: slideInUp 0.8s ease-out;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered animation for traits */
+  .trait-item {
+    animation: fadeInScale 0.6s ease-out;
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Progress bar animation */
+  .score-bar {
+    animation: fillBar 1.5s ease-out;
+  }
+
+  @keyframes fillBar {
+    from {
+      width: 0%;
+    }
+  }
+  
+  /* Instagram feed smooth transitions */
+  .instagram-feed-section .bg-white {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .instagram-feed-section .bg-white:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Trip randomizer transitions */
+  .trip-randomizer-tile {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card-hover {
+    border: 2px solid var(--color-secondary);
+  }
+  
+  button {
+    border: 2px solid var(--color-secondary);
+  }
+  
+  .quiz-option-button {
+    border: 2px solid var(--color-secondary) !important;
+  }
+  
+  .logo-image {
+    filter: contrast(1.2);
+  }
+  
+  .instagram-feed-section .bg-white {
+    border: 2px solid var(--color-secondary);
+  }
+  
+  .trip-randomizer-tile {
+    border: 2px solid var(--color-secondary);
+  }
+}
+
+/* Enhanced responsive breakpoints for hero section */
+@media (min-width: 1280px) {
+  /* Extra large screens: Enhanced spacing */
+  .hero-xl-spacing {
+    padding: 3rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  /* 2XL screens: Maximum spacing */
+  .hero-2xl-spacing {
+    padding: 4rem;
+  }
+}
+
+/* Force clean state reset for quiz options */
+.quiz-option-button[data-clean="true"] {
+  background-color: white !important;
+  border-color: var(--color-neutral-light) !important;
+  color: var(--color-secondary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Prevent any lingering pseudo-states */
+.quiz-option-button:not(:hover):not(:active):not(:focus) {
+  background-color: white;
+  border-color: var(--color-neutral-light);
+  color: var(--color-secondary);
+}
+
+/* Additional mobile touch improvements */
+@media (max-width: 768px) {
+  /* Prevent zoom on double tap */
+  .quiz-option-button {
+    touch-action: manipulation;
+  }
+  
+  /* Ensure buttons reset after touch */
+  .quiz-option-button:not(:active) {
+    background-color: white !important;
+    border-color: var(--color-neutral-light) !important;
+  }
+  
+  /* Instagram feed mobile improvements */
+  .instagram-feed-section .bg-white {
+    touch-action: manipulation;
+  }
+  
+  .instagram-feed-section .bg-white:not(:active) {
+    transform: none;
+  }
+  
+  /* Trip randomizer mobile improvements */
+  .trip-randomizer-navigation button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(11, 145, 149, 0.1);
+  }
+}
+
+/* Enhanced result screen styling */
+.result-gradient-bg {
+  background: linear-gradient(135deg, var(--color-neutral-light) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(11, 145, 149, 0.1) 100%);
+}
+
+.result-card-shadow {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(11, 145, 149, 0.05);
+}
+
+.archetype-card-gradient {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+}
+
+.trait-card-hover {
+  transition: all 0.3s ease;
+}
+
+.trait-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(11, 145, 149, 0.15);
+}
+
+/* Button enhancement for result screen */
+.result-button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.result-button:hover::before {
+  left: 100%;
+}
+
+.result-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Score breakdown enhancements */
+.score-item {
+  transition: all 0.3s ease;
+}
+
+.score-item:hover {
+  transform: scale(1.02);
+  background-color: rgba(11, 145, 149, 0.02);
+}
+
+.score-bar-container {
+  overflow: hidden;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease-out;
+  position: relative;
+}
+
+.score-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Decorative elements for result screen */
+.decorative-blur {
+  filter: blur(40px);
+  opacity: 0.6;
+}
+
+.floating-element {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Enhanced mobile result screen */
+@media (max-width: 640px) {
+  .result-mobile-padding {
+    padding: 1rem;
+  }
+  
+  .result-mobile-text {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .result-mobile-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+  
+  .result-mobile-emoji {
+    font-size: 4rem;
+  }
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode styles can be added here in the future */
+}
+
+/* Scrollbar hiding utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}

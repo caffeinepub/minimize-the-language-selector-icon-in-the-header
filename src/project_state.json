@@ -1,0 +1,114 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 9,
+  "summary": "Project omvat header-taalicoon minimalisatie/uitlijning én een nieuwe blog view count functionaliteit: elke blog krijgt initieel een random view count (700-1000), wordt opgeslagen en telt +1 per keer dat de blog geopend wordt; view count is zichtbaar voor iedereen.",
+  "architectural_notes": [
+    "Header: taalkeuze-icoon visueel afstemmen op (zelfde grootte als) Instagram- en TikTok-icoon voor nette uitlijning/plaatsing naast elkaar.",
+    "Header: zorg dat de spacing/gap tussen het taalicoon en de Instagram/TikTok iconen gelijk is aan de onderlinge spacing van de social media iconen voor consistente uitlijning."
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-update-the-header-language-selector-trigger-to-be-as-minimal-as-possible-icon-only-while-keeping-full-language-switching-functionality-via-the-dropdown",
+      "title": "Update the header language selector trigger to be as minimal as possible (icon-only) while keeping full language switching functionality via the dropdown.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reduce-visual-chrome-for-the-language-selector-trigger-spacing-background-border-so-it-blends-into-the-header-in-a-minimal-way-without-reducing-usability-accessibility",
+      "title": "Reduce visual chrome for the language selector trigger (spacing/background/border) so it blends into the header in a minimal way without reducing usability/accessibility.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-header-language-selector-trigger-icon-so-it-is-the-same-visual-size-as-the-instagram-and-tiktok-icons-in-the-header-allowing-it-to-sit-neatly-alongside-them-without-looking-smaller",
+      "title": "Update the header language selector trigger icon so it is the same visual size as the Instagram and TikTok icons in the header, allowing it to sit neatly alongside them without looking smaller.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-desktop-header-right-side-layout-so-the-horizontal-spacing-between-the-language-selector-icon-and-the-instagram-icon-is-the-same-as-the-spacing-between-the-instagram-and-tiktok-icons-i-e-all-three-icons-appear-evenly-spaced-in-one-row",
+      "title": "Update the desktop header right-side layout so the horizontal spacing between the language selector icon and the Instagram icon is the same as the spacing between the Instagram and TikTok icons (i.e., all three icons appear evenly spaced in one row).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Minimaliseer het taalkeuze-icoon in de header (zo minimalistisch mogelijk)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Maak het taalkeuze-icoon even groot als het Instagram- en TikTok-icoon zodat het er netjes naast kan staan in de header",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Maak de afstand (spacing) tussen het taalicoon en de social media iconen (Instagram/TikTok) gelijk zodat ze consistent naast elkaar staan in de header",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Geef elke (bestaande en toekomstige) blog een initieel random view count (700-1000), sla dit op en verhoog +1 bij elke keer openen; view count is publiek zichtbaar",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Persist a per-blog view count in the backend so that every blog post (existing and future) has an initial randomly assigned view count between 700 and 1000 (inclusive), and the value can be read by any caller (publicly visible).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Implement backend APIs to (1) get a single blog's view count, (2) increment a blog's view count by exactly 1 when the blog is opened, and (3) fetch all view counts keyed by blog ID for list rendering.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Ensure existing blog posts receive an initial random view count between 700 and 1000 (inclusive) and continue incrementing by +1 per open thereafter.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Keep view-count storage consistent with blog lifecycle: when a blog post is deleted, its stored view count entry must also be removed so it no longer appears in the \"all view counts\" result.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Update backend stable state and upgrade behavior to safely introduce persisted blog view counts in the existing single-actor canister, including an upgrade/migration path that preserves existing data (blog posts, users, etc.).",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Minimize the language selector icon in the header",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

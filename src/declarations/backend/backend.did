@@ -1,0 +1,141 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   email: text;
+   name: text;
+   newsletter: bool;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Time = int;
+type ShopProduct = 
+ record {
+   affiliateLink: text;
+   description: text;
+   id: text;
+   images: vec text;
+   popular: bool;
+   price: float64;
+   published: bool;
+   timestamp: Time;
+   title: text;
+ };
+type InstagramFeedItem = 
+ record {
+   caption: text;
+   id: text;
+   link: opt text;
+   mediaType: text;
+   mediaUrl: text;
+   published: bool;
+   timestamp: Time;
+ };
+type FileReference = 
+ record {
+   hash: text;
+   path: text;
+ };
+type EmailCapture = 
+ record {
+   email: text;
+   timestamp: Time;
+ };
+type ContactSubmission = 
+ record {
+   consent: bool;
+   email: text;
+   id: text;
+   message: text;
+   name: text;
+   subject: text;
+   timestamp: Time;
+ };
+type BlogPost = 
+ record {
+   author: text;
+   content: text;
+   coverImage: opt text;
+   excerpt: text;
+   id: text;
+   published: bool;
+   tags: vec text;
+   timestamp: Time;
+   title: text;
+ };
+type AdminSettings = 
+ record {
+   comingSoonEnabled: bool;
+   instagramApiKey: text;
+   tiktokApiKey: text;
+ };
+service : {
+  addInstagramFeedItem: (item: InstagramFeedItem) -> ();
+  addShopProduct: (product: ShopProduct) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  captureEmail: (capture: EmailCapture) -> ();
+  createBlogPost: (post: BlogPost) -> ();
+  deleteBlogPost: (id: text) -> ();
+  deleteInstagramFeedItem: (id: text) -> ();
+  deleteShopProduct: (id: text) -> ();
+  dropFileReference: (path: text) -> ();
+  fetchInstagramFeed: () -> (text);
+  fetchInstagramLogo: () -> (text);
+  fetchTikTokFeed: () -> (text);
+  getAdminSettings: () -> (opt AdminSettings) query;
+  getAllBlogPosts: () -> (vec BlogPost) query;
+  getAllCapturedEmails: () -> (vec EmailCapture) query;
+  getAllContactSubmissions: () -> (vec ContactSubmission) query;
+  getAllInstagramFeedItems: () -> (vec InstagramFeedItem) query;
+  getAllShopProducts: () -> (vec ShopProduct) query;
+  getAllUsersWithProfiles: () ->
+   (vec record {
+          principal;
+          opt UserProfile;
+        }) query;
+  getBlogPost: (id: text) -> (opt BlogPost) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getFileReference: (path: text) -> (FileReference) query;
+  getLatestBlogPosts: () -> (vec BlogPost) query;
+  getPopularShopProducts: () -> (vec ShopProduct) query;
+  getPublishedBlogPosts: () -> (vec BlogPost) query;
+  getPublishedInstagramFeedItems: () -> (vec InstagramFeedItem) query;
+  getPublishedShopProducts: () -> (vec ShopProduct) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  initializeAccessControl: () -> ();
+  isCallerAdmin: () -> (bool) query;
+  listFileReferences: () -> (vec FileReference) query;
+  registerFileReference: (path: text, hash: text) -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  submitContactForm: (submission: ContactSubmission) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateAdminSettings: (settings: AdminSettings) -> ();
+  updateBlogPost: (post: BlogPost) -> ();
+  updateInstagramFeedItem: (item: InstagramFeedItem) -> ();
+  updateShopProduct: (product: ShopProduct) -> ();
+}

@@ -1,0 +1,6 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Frontend plan: wire blog view-count read/increment UI (no frontend changes required by this BuildRequest)",
+  "requirements": []
+}
