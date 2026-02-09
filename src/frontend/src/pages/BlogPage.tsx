@@ -15,7 +15,7 @@ const POSTS_PER_PAGE = 12;
 export default function BlogPage({ onBlogClick }: BlogPageProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const { actor, isFetching: actorFetching } = useActor();
-  const { data: viewCounts } = useGetAllBlogViewCounts();
+  const { data: viewCounts, isLoading: viewCountsLoading } = useGetAllBlogViewCounts();
   const { t, language } = useLanguage();
 
   // Fetch paginated blog posts
@@ -57,9 +57,10 @@ export default function BlogPage({ onBlogClick }: BlogPageProps) {
     });
   };
 
-  const getViewCount = (blogId: string): number => {
-    if (!viewCounts) return 0;
-    return viewCounts.get(blogId) || 0;
+  const getViewCountDisplay = (blogId: string): string => {
+    if (viewCountsLoading || !viewCounts) return '—';
+    const count = viewCounts.get(blogId);
+    return count !== undefined ? count.toString() : '—';
   };
 
   const handleBlogPostClick = (blogId: string) => {
@@ -143,7 +144,7 @@ export default function BlogPage({ onBlogClick }: BlogPageProps) {
                     </div>
                     <div className="flex items-center">
                       <Eye className="w-4 h-4 mr-1" />
-                      <span>{getViewCount(post.id)} {t('blog.viewCount')}</span>
+                      <span>{getViewCountDisplay(post.id)} {t('blog.viewCount')}</span>
                     </div>
                   </div>
                   <h2 className="text-lg font-semibold text-secondary mb-2 line-clamp-2">

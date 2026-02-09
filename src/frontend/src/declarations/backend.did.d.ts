@@ -37,6 +37,13 @@ export interface BlogPost {
   'scheduledAt' : [] | [Time],
   'images' : Array<string>,
 }
+export interface BuildFailure {
+  'failed_attempts' : bigint,
+  'failed_step' : string,
+  'error_message' : string,
+  'timestamp' : Time,
+  'environment' : string,
+}
 export interface ContactSubmission {
   'id' : string,
   'consent' : boolean,
@@ -45,6 +52,13 @@ export interface ContactSubmission {
   'email' : string,
   'message' : string,
   'timestamp' : Time,
+}
+export interface DeploymentFailure {
+  'failed_attempts' : bigint,
+  'failed_step' : string,
+  'error_message' : string,
+  'timestamp' : Time,
+  'environment' : string,
 }
 export interface EmailCapture { 'email' : string, 'timestamp' : Time }
 export interface FileReference { 'hash' : string, 'path' : string }
@@ -163,8 +177,10 @@ export interface _SERVICE {
   'getBlogPostsByCategory' : ActorMethod<[string], Array<BlogPost>>,
   'getBlogPostsByTag' : ActorMethod<[string], Array<BlogPost>>,
   'getBlogViewCount' : ActorMethod<[string], bigint>,
+  'getBuildFailures' : ActorMethod<[], Array<BuildFailure>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getDeploymentFailures' : ActorMethod<[], Array<DeploymentFailure>>,
   'getFileReference' : ActorMethod<[string], FileReference>,
   'getInstagramStories' : ActorMethod<[], Array<InstagramFeedItem>>,
   'getLatestBlogPosts' : ActorMethod<[], Array<BlogPost>>,
@@ -179,6 +195,8 @@ export interface _SERVICE {
   'initializeAccessControl' : ActorMethod<[], undefined>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'listFileReferences' : ActorMethod<[], Array<FileReference>>,
+  'registerBuildFailure' : ActorMethod<[], undefined>,
+  'registerDeploymentFailure' : ActorMethod<[], undefined>,
   'registerFileReference' : ActorMethod<[string, string], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'submitContactForm' : ActorMethod<[ContactSubmission], undefined>,

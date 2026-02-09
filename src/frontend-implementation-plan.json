@@ -1,6 +1,23 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Frontend plan: wire blog view-count read/increment UI (no frontend changes required by this BuildRequest)",
-  "requirements": []
+  "title": "Rename Travel Tools shop tile and link it to the existing Shop route",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Rename the Travel Tools shop tile to “TravelButts shop” and make it navigate to the existing Shop route used by the app navigation.",
+      "acceptanceCriteria": [
+        "In the Travel Tools grid, the tile label is “TravelButts shop” (matching capitalization and spacing exactly).",
+        "Clicking the “TravelButts shop” tile opens the app’s Shop page (the same route used elsewhere in the app for Shop), not “/coming-soon”.",
+        "No other labels elsewhere in the UI are changed as part of this rename."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/TravelToolsGrid.tsx",
+          "operation": "modify",
+          "description": "Update the specific Travel Tools tile entry currently titled “Print on Demand Travel Products” to use the title exactly “TravelButts shop”, and change its navigation target from the coming-soon path to the existing Shop route used by the app (align with the hash route used by Shop navigation, e.g. “#shop”). Ensure only this tile’s label is changed and no other UI labels are modified."
+        }
+      ]
+    }
+  ]
 }

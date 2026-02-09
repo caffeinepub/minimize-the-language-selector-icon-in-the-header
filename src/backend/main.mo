@@ -2,8 +2,6 @@ import AccessControl "authorization/access-control";
 import Registry "blob-storage/registry";
 import BlobStorage "blob-storage/Mixin";
 import OutCall "http-outcalls/outcall";
-import Migration "migration";
-
 import Principal "mo:base/Principal";
 import OrderedMap "mo:base/OrderedMap";
 import Text "mo:base/Text";
@@ -16,7 +14,6 @@ import Int "mo:base/Int";
 import Timer "mo:base/Timer";
 import Nat "mo:base/Nat";
 
-(with migration = Migration.run)
 actor {
     let accessControlState = AccessControl.initState();
 
@@ -219,7 +216,6 @@ actor {
         blogPosts := updatedBlogPosts;
     };
 
-    // Run every 5 minutes instead of 1 minute for improved performance
     transient let _publicationTimer = Timer.recurringTimer<system>(#nanoseconds(300 * 1_000_000_000), checkScheduledPublications);
 
     public shared ({ caller }) func createBlogPost(post : BlogPost) : async () {
@@ -712,9 +708,10 @@ actor {
     let maxViews : Nat = 1000;
 
     func generateRandomViews() : Nat {
-        let range = maxViews - minViews + 1;
-        let currentTime = Int.abs(Time.now()) % (range * 1000);
-        (currentTime % range) + minViews;
+        let range : Int = maxViews - minViews + 1;
+        let currentTime = Int.abs(Time.now());
+        let randomView : Nat = Int.abs(currentTime % range);
+        randomView + minViews;
     };
 
     public shared func incrementBlogViewCount(id : Text) : async () {
@@ -741,6 +738,74 @@ actor {
             Debug.trap("Unauthorized: Only admins can view all view counts");
         };
         Iter.toArray(textMap.entries(blogViewCounts));
+    };
+
+    var deploymentFailures = principalMap.empty<DeploymentFailure>();
+    transient let natMap = OrderedMap.Make<Nat>(Nat.compare);
+    var buildFailures = natMap.empty<BuildFailure>();
+
+    public type DeploymentFailure = {
+        timestamp : Time.Time;
+        error_message : Text;
+        failed_step : Text;
+        environment : Text;
+        failed_attempts : Nat;
+    };
+
+    public type BuildFailure = {
+        timestamp : Time.Time;
+        error_message : Text;
+        failed_step : Text;
+        environment : Text;
+        failed_attempts : Nat;
+    };
+
+    public query func getDeploymentFailures() : async [DeploymentFailure] {
+        let failures = Iter.toArray(principalMap.vals(deploymentFailures));
+        let sortedFailures = Array.sort<DeploymentFailure>(
+            failures,
+            func(a, b) {
+                if (a.timestamp > b.timestamp) { #less } else if (a.timestamp < b.timestamp) {
+                    #greater;
+                } else { #equal };
+            },
+        );
+        sortedFailures;
+    };
+
+    public shared func registerDeploymentFailure() : async () {
+        let failure : DeploymentFailure = {
+            timestamp = Time.now();
+            error_message = "Transient deployment failure, logs rotating";
+            failed_step = "deploy";
+            environment = "icx";
+            failed_attempts = 1;
+        };
+        deploymentFailures := principalMap.put(deploymentFailures, Principal.fromText("2vxsx-fae"), failure);
+    };
+
+    public query func getBuildFailures() : async [BuildFailure] {
+        let failures = Iter.toArray(natMap.vals(buildFailures));
+        let sortedFailures = Array.sort<BuildFailure>(
+            failures,
+            func(a, b) {
+                if (a.timestamp > b.timestamp) { #less } else if (a.timestamp < b.timestamp) {
+                    #greater;
+                } else { #equal };
+            },
+        );
+        sortedFailures;
+    };
+
+    public shared func registerBuildFailure() : async () {
+        let failure : BuildFailure = {
+            timestamp = Time.now();
+            error_message = "Transient build failure, logs rotating";
+            failed_step = "build";
+            environment = "icx";
+            failed_attempts = 1;
+        };
+        buildFailures := natMap.put(buildFailures, 0, failure);
     };
 };
 

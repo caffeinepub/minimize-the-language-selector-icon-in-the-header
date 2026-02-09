@@ -16,7 +16,7 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
   const [playingVideos, setPlayingVideos] = useState<Set<string>>(new Set());
   const { data: blogPosts, isLoading: blogLoading } = useGetPublishedBlogPosts();
   const { data: instagramItems, isLoading: instagramLoading } = useGetInstagramFeedItems();
-  const { data: viewCounts } = useGetAllBlogViewCounts();
+  const { data: viewCounts, isLoading: viewCountsLoading } = useGetAllBlogViewCounts();
   const { data: isAdmin } = useIsAdmin();
   const { identity } = useInternetIdentity();
   const { t, language } = useLanguage();
@@ -121,9 +121,10 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
     }
   };
 
-  const getViewCount = (blogId: string): number => {
-    if (!viewCounts) return 0;
-    return viewCounts.get(blogId) || 0;
+  const getViewCountDisplay = (blogId: string): string => {
+    if (viewCountsLoading || !viewCounts) return '—';
+    const count = viewCounts.get(blogId);
+    return count !== undefined ? count.toString() : '—';
   };
 
   // Sort blog posts by publishedAt (or timestamp if publishedAt is null), newest first, and limit to 6
@@ -234,7 +235,7 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
                         </div>
                         <div className="flex items-center">
                           <Eye className="w-4 h-4 mr-1" />
-                          <span>{getViewCount(post.id)}</span>
+                          <span>{getViewCountDisplay(post.id)} {t('blog.viewCount')}</span>
                         </div>
                       </div>
                       <h3 className="text-lg font-semibold text-secondary mb-2 line-clamp-2">
@@ -269,138 +270,83 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
                 : 'opacity-0 translate-y-4 absolute inset-0 pointer-events-none'
             }`}
           >
-            <div className="instagram-feed-section">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {instagramLoading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {Array.from({ length: 6 }).map((_, index) => (
-                    <div key={index} className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
-                      <div className="h-64 bg-neutral-light"></div>
-                      <div className="p-4">
-                        <div className="h-4 bg-neutral-light rounded mb-2"></div>
-                        <div className="h-4 bg-neutral-light rounded w-3/4"></div>
-                      </div>
+                Array.from({ length: 6 }).map((_, index) => (
+                  <div key={index} className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
+                    <div className="h-64 bg-neutral-light"></div>
+                    <div className="p-4">
+                      <div className="h-4 bg-neutral-light rounded mb-2"></div>
+                      <div className="h-4 bg-neutral-light rounded w-3/4"></div>
                     </div>
-                  ))}
-                </div>
-              ) : instagramItems && Array.isArray(instagramItems) && instagramItems.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {instagramItems.map((item: InstagramFeedItem) => (
-                    <div 
+                  </div>
+                ))
+              ) : instagramItems && instagramItems.filter(item => item.published && !item.story).length > 0 ? (
+                instagramItems
+                  .filter(item => item.published && !item.story)
+                  .slice(0, 6)
+                  .map((item) => (
+                    <article 
                       key={item.id} 
-                      className={`bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 group ${
-                        item.mediaType === 'video' && item.link ? 'cursor-pointer' : item.link ? 'cursor-pointer' : ''
-                      }`}
+                      className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
                       onClick={() => handleInstagramItemClick(item)}
                     >
                       <div className="relative h-64 bg-neutral-light overflow-hidden">
-                        {item.mediaType === 'video' && item.mediaUrl ? (
-                          <div className="relative w-full h-full">
+                        {item.mediaType === 'video' ? (
+                          <>
                             <video
                               ref={(el) => setVideoRef(item.id, el)}
                               data-video-id={item.id}
                               src={item.mediaUrl}
                               className="w-full h-full object-cover"
-                              muted
                               loop
+                              muted
                               playsInline
-                              preload="metadata"
-                              onEnded={() => {
-                                setPlayingVideos(prev => {
-                                  const newSet = new Set(prev);
-                                  newSet.delete(item.id);
-                                  return newSet;
-                                });
-                              }}
                             />
-                            <div 
-                              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
-                                playingVideos.has(item.id) 
-                                  ? 'opacity-0 group-hover:opacity-100 bg-black bg-opacity-20' 
-                                  : 'opacity-100 bg-black bg-opacity-30'
-                              }`}
+                            <button
                               onClick={(e) => toggleVideoPlay(item.id, e)}
+                              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
                               {playingVideos.has(item.id) ? (
                                 <Pause className="w-12 h-12 text-white" />
                               ) : (
                                 <Play className="w-12 h-12 text-white" />
                               )}
+                            </button>
+                            <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
+                              <Video className="w-4 h-4 text-white" />
                             </div>
-                            <div className="absolute top-3 right-3 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
-                              <Video className="w-3 h-3" />
-                              <span>{t('instagram.video')}</span>
-                            </div>
-                            {item.link && (
-                              <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
-                                <ExternalLink className="w-3 h-3" />
-                                <span>{t('instagram.link')}</span>
-                              </div>
-                            )}
-                          </div>
+                          </>
                         ) : (
-                          <div className="relative w-full h-full">
+                          <>
                             <img
-                              src={item.mediaUrl || ''}
-                              alt={item.caption || 'Instagram post'}
+                              src={item.mediaUrl}
+                              alt={item.caption}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               loading="lazy"
                             />
-                            <div className="absolute top-3 right-3 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
-                              <ImageIcon className="w-3 h-3" />
-                              <span>{t('instagram.image')}</span>
+                            <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
+                              <ImageIcon className="w-4 h-4 text-white" />
                             </div>
-                            {item.link && (
-                              <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
-                                <ExternalLink className="w-3 h-3" />
-                                <span>{t('instagram.link')}</span>
-                              </div>
-                            )}
+                          </>
+                        )}
+                        {item.link && (
+                          <div className="absolute bottom-2 right-2 bg-white bg-opacity-90 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ExternalLink className="w-4 h-4 text-secondary" />
                           </div>
                         )}
                       </div>
-
                       <div className="p-4">
-                        {item.caption && (
-                          <p className="text-secondary text-sm mb-3 line-clamp-3 leading-relaxed">
-                            {item.caption}
-                          </p>
-                        )}
-                        <div className="flex items-center justify-between text-xs text-secondary-light">
-                          <span className="flex items-center space-x-1">
-                            <Calendar className="w-3 h-3" />
-                            <span>{formatDate(item.timestamp)}</span>
-                          </span>
-                          {item.link && (
-                            <div className="flex items-center space-x-1 text-accent group-hover:text-accent-dark">
-                              <span>{t('instagram.viewPost')}</span>
-                              <ArrowRight className="w-3 h-3" />
-                            </div>
-                          )}
-                        </div>
+                        <p className="text-secondary-light text-sm line-clamp-3">
+                          {item.caption}
+                        </p>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    </article>
+                  ))
               ) : (
-                <div className="text-center py-16">
-                  <div className="max-w-md mx-auto">
-                    <div className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Instagram className="w-10 h-10 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-secondary mb-4">{t('instagram.followAdventures')}</h3>
-                    <p className="text-secondary-light mb-6 leading-relaxed">
-                      {t('instagram.description')}
-                    </p>
-                    <a
-                      href="https://instagram.com/travelbuttsofficial"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-6 py-3 rounded-full font-medium transition-colors shadow-sm"
-                    >
-                      {t('instagram.viewOnInstagram')}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </a>
-                  </div>
+                <div className="col-span-full text-center py-12">
+                  <Instagram className="w-16 h-16 mx-auto mb-4 text-secondary-light" />
+                  <p className="text-secondary-light text-lg">{t('blog.noInstagramPosts')}</p>
                 </div>
               )}
             </div>
@@ -408,8 +354,11 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
         </div>
       </div>
 
+      {/* Blog Post Modal */}
       {showBlogModal && (
-        <BlogPostModal onClose={() => setShowBlogModal(false)} />
+        <BlogPostModal
+          onClose={() => setShowBlogModal(false)}
+        />
       )}
     </section>
   );

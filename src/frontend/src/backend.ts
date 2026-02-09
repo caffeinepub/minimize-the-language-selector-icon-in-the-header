@@ -169,9 +169,23 @@ export interface ShopProduct {
     price: number;
     images: Array<string>;
 }
+export interface DeploymentFailure {
+    failed_attempts: bigint;
+    failed_step: string;
+    error_message: string;
+    timestamp: Time;
+    environment: string;
+}
 export interface TransformationInput {
     context: Uint8Array;
     response: http_request_result;
+}
+export interface BuildFailure {
+    failed_attempts: bigint;
+    failed_step: string;
+    error_message: string;
+    timestamp: Time;
+    environment: string;
 }
 export interface ShopCategory {
     id: string;
@@ -241,8 +255,10 @@ export interface backendInterface {
     getBlogPostsByCategory(category: string): Promise<Array<BlogPost>>;
     getBlogPostsByTag(tag: string): Promise<Array<BlogPost>>;
     getBlogViewCount(id: string): Promise<bigint>;
+    getBuildFailures(): Promise<Array<BuildFailure>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getDeploymentFailures(): Promise<Array<DeploymentFailure>>;
     getFileReference(path: string): Promise<FileReference>;
     getInstagramStories(): Promise<Array<InstagramFeedItem>>;
     getLatestBlogPosts(): Promise<Array<BlogPost>>;
@@ -257,6 +273,8 @@ export interface backendInterface {
     initializeAccessControl(): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
     listFileReferences(): Promise<Array<FileReference>>;
+    registerBuildFailure(): Promise<void>;
+    registerDeploymentFailure(): Promise<void>;
     registerFileReference(path: string, hash: string): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitContactForm(submission: ContactSubmission): Promise<void>;
@@ -776,6 +794,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getBuildFailures(): Promise<Array<BuildFailure>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getBuildFailures();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getBuildFailures();
+            return result;
+        }
+    }
     async getCallerUserProfile(): Promise<UserProfile | null> {
         if (this.processError) {
             try {
@@ -802,6 +834,20 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getCallerUserRole();
             return from_candid_UserRole_n27(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getDeploymentFailures(): Promise<Array<DeploymentFailure>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getDeploymentFailures();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getDeploymentFailures();
+            return result;
         }
     }
     async getFileReference(arg0: string): Promise<FileReference> {
@@ -997,6 +1043,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.listFileReferences();
+            return result;
+        }
+    }
+    async registerBuildFailure(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.registerBuildFailure();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.registerBuildFailure();
+            return result;
+        }
+    }
+    async registerDeploymentFailure(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.registerDeploymentFailure();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.registerDeploymentFailure();
             return result;
         }
     }

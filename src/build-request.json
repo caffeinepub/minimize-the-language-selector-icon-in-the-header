@@ -1,125 +1,66 @@
 {
   "kind": "build_request",
-  "title": "Add persistent random blog view counts (700–1000) and increment on blog open",
+  "title": "Rename Travel Tools shop tile and add one-time random baseline for blog view counts",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-5",
-      "text": "Persist a per-blog view count in the backend so that every blog post (existing and future) has an initial randomly assigned view count between 700 and 1000 (inclusive), and the value can be read by any caller (publicly visible).",
-      "target": "backend",
+      "id": "REQ-1",
+      "text": "Update the Travel Tools tile currently titled “Print on Demand Travel Products” to display the title exactly as “TravelButts shop”, and make that tile navigate directly to the existing Shop page/route (use the same destination as the app’s current Shop navigation, not the coming-soon page).",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5",
-          "msg-6",
-          "msg-7"
+          "msg-12",
+          "msg-13",
+          "msg-15"
         ],
         "quotes": [
-          "Zorg dat alle blogs achter het oogje een random view count hebben tussen de 700-1000 views, dit geld voor alle huidige blogs en alle komende blogs.",
-          "Elke blog moet een random view count tussen de 700-1000 krijgen",
-          "Extra - De view count mag gewoon voor iedereen zichtbaar zijn."
+          "Kunnen we de print on demand travel products, TravelButts shop noemen inplaats van print on demand travel products.",
+          "De tile staat bij de traveltools, en ik wil alleen de naam wijzigen ja. en alleen op de tile want ergens anders komt het niet terug als het goed is. Het mag dan ook direct gelinked worden naar de shop",
+          "Ga je gang"
         ]
       },
       "acceptanceCriteria": [
-        "Calling the backend method that returns a blog's view count returns a stable, persisted value for that blog ID.",
-        "For a blog ID that has not been assigned a count before, the first assignment is an integer in the inclusive range [700, 1000].",
-        "The view count data is readable without requiring authentication/admin permissions."
+        "In the Travel Tools grid, the tile label is “TravelButts shop” (matching capitalization and spacing exactly).",
+        "Clicking the “TravelButts shop” tile opens the app’s Shop page (the same route used elsewhere in the app for Shop), not “/coming-soon”.",
+        "No other labels elsewhere in the UI are changed as part of this rename."
       ]
     },
     {
-      "id": "REQ-6",
-      "text": "Implement backend APIs to (1) get a single blog's view count, (2) increment a blog's view count by exactly 1 when the blog is opened, and (3) fetch all view counts keyed by blog ID for list rendering.",
+      "id": "REQ-2",
+      "text": "Implement one-time view-count initialization for blog posts: when a blog post is opened for the first time and it has no persisted view count yet, set its initial view count to a random integer between 700 and 1000 (inclusive) and persist it; on subsequent opens, increment the persisted view count by exactly 1 per open.",
       "target": "backend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-7",
+          "msg-8",
+          "msg-15"
         ],
         "quotes": [
-          "daarna mag elke keer dat die blog geopend word er 1 bij op geteld worden."
+          "Ik heb een aantal blogs online staan op de live website die niet mee worden genomen in de random viewcount van 700-1000, hoe kan ik dit het beste oplossen?",
+          "Kan het ook opgelost worden om 1 malig, alle blogs die reeds online staan de opdracht tegeven de eerste keer dat ze nu geopend worden krijgen ze een random count van 700-1000 en dat word de viewcount, daarna gewoon over op 1 keer openen is 1 view",
+          "Ga je gang"
         ]
       },
       "acceptanceCriteria": [
-        "`getBlogViewCount(blogId)` returns the current persisted count for that blog ID (0 is never returned for a published blog once initialized).",
-        "`incrementBlogViewCount(blogId)` increases the persisted count by exactly 1 and returns successfully.",
-        "`getAllBlogViewCounts()` returns a complete list of (blogId, count) pairs for blogs that exist in storage."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Ensure existing blog posts receive an initial random view count between 700 and 1000 (inclusive) and continue incrementing by +1 per open thereafter.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "Voor bestaande blogs, geef deze een random viewcount tussen 700-1000 en vervolg daarna dat als een blog word geopend er 1 view bij komt."
-        ]
-      },
-      "acceptanceCriteria": [
-        "After deploying the change, all existing blog posts have an initialized view count in [700, 1000] without requiring manual admin actions.",
-        "Incrementing an existing blog post’s view count works and persists across refreshes.",
-        "The initialization does not overwrite an already-initialized view count for a blog if it already exists."
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Keep view-count storage consistent with blog lifecycle: when a blog post is deleted, its stored view count entry must also be removed so it no longer appears in the \"all view counts\" result.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5"
-        ],
-        "quotes": [
-          "dit geld voor alle huidige blogs en alle komende blogs."
-        ]
-      },
-      "acceptanceCriteria": [
-        "Deleting a blog post removes its view count entry from backend storage.",
-        "After deletion, `getAllBlogViewCounts()` does not include the deleted blog ID."
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Update backend stable state and upgrade behavior to safely introduce persisted blog view counts in the existing single-actor canister, including an upgrade/migration path that preserves existing data (blog posts, users, etc.).",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-5",
-          "msg-6"
-        ],
-        "quotes": [
-          "dit geld voor alle huidige blogs en alle komende blogs.",
-          "de view count mag opgeslagen worden als dat helpt met de telling vanaf het random nummer bij te houden"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Upgrading the canister does not lose existing stored data (e.g., blog posts, user profiles, other existing state).",
-        "After upgrade, the canister initializes missing view counts for existing blog posts (in [700, 1000]) without re-randomizing counts that already exist."
+        "If a blog post has no stored view count yet, the first call that records an open persists a random integer in the range [700, 1000] as the view count.",
+        "If a blog post already has a stored view count, each recorded open increases it by exactly 1.",
+        "The stored view count remains stable across page reloads and canister upgrades (i.e., it is persisted in canister state, not computed only on the frontend).",
+        "Existing blog posts that currently show no view count will start showing a numeric value after being opened once (because the backend initializes and persists the baseline)."
       ]
     }
   ],
   "constraints": [
-    "Respect the single-actor backend architecture (all Motoko logic remains in backend/main.mo).",
-    "Only use Internet Identity for authentication; view counts must be publicly readable without auth gating.",
-    "Do not edit any frontend files under frontend/src/components/ui or other frontend immutablePaths listed in SYSTEM_CONTEXT."
+    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
+    "Do not modify files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT.",
+    "Do not route any static assets through the backend."
   ],
   "nonGoals": [
-    "Do not implement real analytics, unique visitor tracking, bot detection, or per-user/per-session deduplication of views.",
-    "Do not add external databases or third-party analytics services.",
-    "Do not redesign the blog UI beyond what is necessary to support the requested view-count behavior."
+    "Importing or scraping blog posts from the live website into the canister is out of scope.",
+    "Changing blog content, blog IDs/slugs, or adding new blog management UX is out of scope.",
+    "Renaming any other occurrences of “Print on Demand Travel Products” outside the specific Travel Tools tile is out of scope."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

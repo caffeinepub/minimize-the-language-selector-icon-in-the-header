@@ -1,46 +1,29 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T20:03:47.887Z",
+  "generatedAt": "2026-02-07T10:59:56.793Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 0,
+    "total": 2,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-5",
-        "summary": "Persist a per-blog view count in the backend so that every blog post (existing and future) has an initial randomly assigned view count between 700 and 1000 (inclusive), and the value can be read by any caller (publicly visible).",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
+        "id": "REQ-1",
+        "summary": "Update the Travel Tools tile currently titled “Print on Demand Travel Products” to display the title exactly as “TravelButts shop”, and make that tile navigate directly to the existing Shop page/route (use the same destination as the app’s current Shop navigation, not the coming-soon page).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/TravelToolsGrid.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/TravelToolsGrid.tsx"
+        ]
       },
       {
-        "id": "REQ-6",
-        "summary": "Implement backend APIs to (1) get a single blog's view count, (2) increment a blog's view count by exactly 1 when the blog is opened, and (3) fetch all view counts keyed by blog ID for list rendering.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-7",
-        "summary": "Ensure existing blog posts receive an initial random view count between 700 and 1000 (inclusive) and continue incrementing by +1 per open thereafter.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-8",
-        "summary": "Keep view-count storage consistent with blog lifecycle: when a blog post is deleted, its stored view count entry must also be removed so it no longer appears in the \"all view counts\" result.",
-        "status": "unknown",
-        "plannedFiles": [],
-        "matchedFiles": []
-      },
-      {
-        "id": "REQ-9",
-        "summary": "Update backend stable state and upgrade behavior to safely introduce persisted blog view counts in the existing single-actor canister, including an upgrade/migration path that preserves existing data (blog posts, users, etc.).",
+        "id": "REQ-2",
+        "summary": "Implement one-time view-count initialization for blog posts: when a blog post is opened for the first time and it has no persisted view count yet, set its initial view count to a random integer between 700 and 1000 (inclusive) and persist it; on subsequent opens, increment the persisted view count by exactly 1 per open.",
         "status": "unknown",
         "plannedFiles": [],
         "matchedFiles": []
@@ -49,14 +32,11 @@
   },
   "changedFiles": [
     "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "feature_evidence.json",
+    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
+    "frontend/src/components/TravelToolsGrid.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

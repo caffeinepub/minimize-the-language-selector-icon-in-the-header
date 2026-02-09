@@ -101,6 +101,20 @@ export const UserProfile = IDL.Record({
   'language' : IDL.Text,
   'newsletter' : IDL.Bool,
 });
+export const BuildFailure = IDL.Record({
+  'failed_attempts' : IDL.Nat,
+  'failed_step' : IDL.Text,
+  'error_message' : IDL.Text,
+  'timestamp' : Time,
+  'environment' : IDL.Text,
+});
+export const DeploymentFailure = IDL.Record({
+  'failed_attempts' : IDL.Nat,
+  'failed_step' : IDL.Text,
+  'error_message' : IDL.Text,
+  'timestamp' : Time,
+  'environment' : IDL.Text,
+});
 export const FileReference = IDL.Record({
   'hash' : IDL.Text,
   'path' : IDL.Text,
@@ -193,8 +207,14 @@ export const idlService = IDL.Service({
     ),
   'getBlogPostsByTag' : IDL.Func([IDL.Text], [IDL.Vec(BlogPost)], ['query']),
   'getBlogViewCount' : IDL.Func([IDL.Text], [IDL.Nat], ['query']),
+  'getBuildFailures' : IDL.Func([], [IDL.Vec(BuildFailure)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getDeploymentFailures' : IDL.Func(
+      [],
+      [IDL.Vec(DeploymentFailure)],
+      ['query'],
+    ),
   'getFileReference' : IDL.Func([IDL.Text], [FileReference], ['query']),
   'getInstagramStories' : IDL.Func([], [IDL.Vec(InstagramFeedItem)], ['query']),
   'getLatestBlogPosts' : IDL.Func([], [IDL.Vec(BlogPost)], ['query']),
@@ -225,6 +245,8 @@ export const idlService = IDL.Service({
   'initializeAccessControl' : IDL.Func([], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'listFileReferences' : IDL.Func([], [IDL.Vec(FileReference)], ['query']),
+  'registerBuildFailure' : IDL.Func([], [], []),
+  'registerDeploymentFailure' : IDL.Func([], [], []),
   'registerFileReference' : IDL.Func([IDL.Text, IDL.Text], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitContactForm' : IDL.Func([ContactSubmission], [], []),
@@ -335,6 +357,20 @@ export const idlFactory = ({ IDL }) => {
     'language' : IDL.Text,
     'newsletter' : IDL.Bool,
   });
+  const BuildFailure = IDL.Record({
+    'failed_attempts' : IDL.Nat,
+    'failed_step' : IDL.Text,
+    'error_message' : IDL.Text,
+    'timestamp' : Time,
+    'environment' : IDL.Text,
+  });
+  const DeploymentFailure = IDL.Record({
+    'failed_attempts' : IDL.Nat,
+    'failed_step' : IDL.Text,
+    'error_message' : IDL.Text,
+    'timestamp' : Time,
+    'environment' : IDL.Text,
+  });
   const FileReference = IDL.Record({ 'hash' : IDL.Text, 'path' : IDL.Text });
   const http_header = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
   const http_request_result = IDL.Record({
@@ -429,8 +465,14 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getBlogPostsByTag' : IDL.Func([IDL.Text], [IDL.Vec(BlogPost)], ['query']),
     'getBlogViewCount' : IDL.Func([IDL.Text], [IDL.Nat], ['query']),
+    'getBuildFailures' : IDL.Func([], [IDL.Vec(BuildFailure)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getDeploymentFailures' : IDL.Func(
+        [],
+        [IDL.Vec(DeploymentFailure)],
+        ['query'],
+      ),
     'getFileReference' : IDL.Func([IDL.Text], [FileReference], ['query']),
     'getInstagramStories' : IDL.Func(
         [],
@@ -469,6 +511,8 @@ export const idlFactory = ({ IDL }) => {
     'initializeAccessControl' : IDL.Func([], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'listFileReferences' : IDL.Func([], [IDL.Vec(FileReference)], ['query']),
+    'registerBuildFailure' : IDL.Func([], [], []),
+    'registerDeploymentFailure' : IDL.Func([], [], []),
     'registerFileReference' : IDL.Func([IDL.Text, IDL.Text], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitContactForm' : IDL.Func([ContactSubmission], [], []),

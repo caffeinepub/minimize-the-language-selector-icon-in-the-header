@@ -18,9 +18,9 @@ const tools = [
   },
   {
     icon: ShoppingBag,
-    title: 'Print on Demand Travel Products',
+    title: 'TravelButts shop',
     description: 'Custom travel accessories and souvenirs designed just for your journey',
-    href: '/coming-soon'
+    href: '#shop'
   },
   {
     icon: Train,
