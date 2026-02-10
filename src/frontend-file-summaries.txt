@@ -28,5 +28,6 @@
   "frontend/scripts/README.md": "Documentation for the deployment workflow including usage instructions, retry behavior, failure log location, reporting guidelines, and troubleshooting tips.",
   "frontend/.gitignore": "Git ignore configuration for frontend directory excluding node_modules, build outputs, environment files, IDE files, OS files, and deployment logs (except .gitkeep).",
   "frontend/deploy-logs/.gitkeep": "Placeholder file to ensure the deploy-logs directory exists in the repository while keeping actual log files untracked.",
-  "frontend/src/components/TravelToolsGrid.tsx": "Travel tools grid component displaying six interactive tool tiles with icons, titles, and descriptions, including the renamed \"TravelButts shop\" tile that now links to the Shop page via #shop hash route."
+  "frontend/src/components/TravelToolsGrid.tsx": "Travel tools grid component displaying six interactive tool tiles with icons, titles, and descriptions, including the renamed \"TravelButts shop\" tile that now links to the Shop page via #shop hash route.",
+  "frontend/src/pages/TravelStyleQuiz.tsx": "Travel style quiz component with 15 questions determining user's travel archetype, displaying results with traits, and now includes a prominent CTA button on the results page that navigates to the packing list via hash routing (#packing-list)."
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, RotateCcw, Home, Trophy, Target, CheckCircle, Share2, Instagram, Star, Award } from 'lucide-react';
+import { Compass, RotateCcw, Home, Trophy, Target, CheckCircle, Share2, Instagram, Star, Award, Package } from 'lucide-react';
 import { useFileUrl } from '../blob-storage/FileStorage';
 import { generateTravelStyleQuizStory, downloadInstagramStory } from '../utils/instagramStoryGenerator';
 import { showToast } from '../utils/toast';
@@ -376,16 +376,16 @@ export default function TravelStyleQuiz() {
       const filename = `travel-style-${results.primary.name.toLowerCase().replace(/\s+/g, '-')}.png`;
       
       downloadInstagramStory(storyImageUrl, filename);
-      showToast('Instagram Story image downloaded! Upload it to your Instagram Story.', 'success');
+      showToast('Instagram Story image downloaded! Upload it to your Instagram Story to share your result.', 'success');
     } catch (error) {
-      console.error('Error generating Instagram Story:', error);
-      showToast('Failed to generate Instagram Story image. Please try again.', 'error');
+      console.error('Error generating Instagram story:', error);
+      showToast('Failed to generate Instagram story. Please try again.', 'error');
     } finally {
       setIsGeneratingStory(false);
     }
   };
 
-  const startQuiz = () => {
+  const restartQuiz = () => {
     setCurrentQuestion(0);
     setScores({
       'Thrill Seeker': 0,
@@ -401,360 +401,261 @@ export default function TravelStyleQuiz() {
     setQuizCompleted(false);
     setResults(null);
     setQuestionKey(0);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const goHome = () => {
     window.location.hash = '';
-    window.location.reload();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    startQuiz();
-  }, []);
+  const goToPackingList = () => {
+    window.location.hash = '#packing-list';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
+  // Quiz completed - show results
   if (quizCompleted && results) {
     return (
-      <div className="min-h-screen bg-neutral-light py-8">
-        <div className="max-w-4xl mx-auto px-4">
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-accent/5 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <button
-              onClick={goHome}
-              className="inline-flex items-center space-x-2 text-secondary-light hover:text-secondary mb-4 transition-colors"
-            >
-              <Home className="w-4 h-4" />
-              <span>Back to Home</span>
-            </button>
-            
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-3xl font-bold text-secondary font-gotham">
-                Your Travel Style Revealed!
-              </h1>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full mb-6 shadow-lg">
+              <Trophy className="w-10 h-10 text-white" />
             </div>
-            
-            <p className="text-secondary-light text-lg">
-              Get ready to explore the world in your unique way
+            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+              Your Travel Style Revealed!
+            </h1>
+            <p className="text-lg text-secondary-light">
+              Discover what makes your travel adventures unique
             </p>
           </div>
 
-          {/* Main Result Card */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
-            {/* Primary Archetype Section */}
-            <div className="bg-accent text-white p-8 text-center">
-              <div className="text-6xl mb-4">
-                {results.primary.emoji}
-              </div>
-              
-              <h2 className="text-2xl font-bold mb-3 font-gotham">
+          {/* Primary Result */}
+          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-8 border-2 border-primary/10">
+            <div className="text-center mb-8">
+              <div className="text-7xl mb-4">{results.primary.emoji}</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
                 {results.primary.name}
               </h2>
-              
-              <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
-                <Award className="w-4 h-4" />
-                <span className="font-medium text-sm">Your Primary Travel Style</span>
-              </div>
-              
-              <p className="text-lg leading-relaxed max-w-2xl mx-auto">
+              <p className="text-lg text-secondary-light leading-relaxed">
                 {results.primary.description}
               </p>
             </div>
 
-            {/* Blended Result Section */}
-            {results.isBlended && results.secondary && (
-              <div className="bg-neutral-light p-6 border-t border-white">
-                <div className="text-center">
-                  <div className="flex items-center justify-center space-x-3 mb-3">
-                    <span className="text-2xl">{results.primary.emoji}</span>
-                    <span className="text-accent font-bold">+</span>
-                    <span className="text-2xl">{results.secondary.emoji}</span>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-secondary mb-3 font-gotham">
-                    You're also a {results.secondary.name}!
-                  </h3>
-                  
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
-                    <p className="text-secondary-light leading-relaxed">
-                      {results.secondary.description}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Traits Section */}
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-secondary mb-4 text-center font-gotham">
-                Your Travel Superpowers
+            {/* Traits */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center justify-center gap-2">
+                <Star className="w-5 h-5" />
+                Your Travel Traits
               </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl mx-auto">
-                {/* Primary traits */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {results.primary.traits.map((trait, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-3 bg-neutral-light rounded-lg p-3 border border-neutral-light"
+                    className="flex items-center gap-3 bg-primary/5 rounded-xl p-4"
                   >
-                    <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center flex-shrink-0">
-                      <Star className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="font-medium text-secondary text-sm">{trait}</span>
-                  </div>
-                ))}
-                
-                {/* Secondary traits if blended */}
-                {results.isBlended && results.secondary && results.secondary.traits.slice(0, 2).map((trait, index) => (
-                  <div
-                    key={`secondary-${index}`}
-                    className="flex items-center space-x-3 bg-white rounded-lg p-3 border border-secondary/20"
-                  >
-                    <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0">
-                      <Star className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="font-medium text-secondary text-sm">{trait}</span>
+                    <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                    <span className="text-secondary">{trait}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Score Breakdown */}
-            <div className="p-6 bg-neutral-light border-t border-white">
-              <h3 className="text-lg font-bold text-secondary mb-4 text-center font-gotham">
-                Your Complete Score Breakdown
-              </h3>
-              
-              <div className="max-w-2xl mx-auto space-y-3">
-                {Object.entries(scores)
-                  .sort(([,a], [,b]) => b - a)
-                  .map(([archetype, score], index) => (
-                    <div key={archetype} className="relative">
-                      <div className="flex justify-between items-center mb-2">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-lg">{archetypes[archetype].emoji}</span>
-                          <span className="font-medium text-secondary text-sm">
-                            {archetype}
-                          </span>
-                          {index === 0 && (
-                            <div className="bg-accent text-white text-xs px-2 py-1 rounded-full font-bold">
-                              #1
-                            </div>
-                          )}
-                          {index === 1 && results.isBlended && (
-                            <div className="bg-secondary text-white text-xs px-2 py-1 rounded-full font-bold">
-                              #2
-                            </div>
-                          )}
-                        </div>
-                        <span className="font-bold text-secondary text-sm">
-                          {score}/15
-                        </span>
-                      </div>
-                      
-                      <div className="w-full bg-white rounded-full h-2 overflow-hidden">
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-1000 ease-out ${
-                            index === 0 
-                              ? 'bg-accent' 
-                              : index === 1 && results.isBlended
-                              ? 'bg-secondary'
-                              : 'bg-gray-300'
-                          }`}
-                          style={{ 
-                            width: `${(score / 15) * 100}%`,
-                            animationDelay: `${index * 100}ms`
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+            {/* Secondary archetype if blended */}
+            {results.isBlended && results.secondary && (
+              <div className="border-t-2 border-primary/10 pt-8">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
+                    <Award className="w-5 h-5 text-accent" />
+                    <span className="text-accent font-semibold">Bonus Trait</span>
+                  </div>
+                  <h3 className="text-2xl font-bold text-primary mb-2">
+                    {results.secondary.emoji} {results.secondary.name}
+                  </h3>
+                  <p className="text-secondary-light">
+                    You also have strong {results.secondary.name} tendencies!
+                  </p>
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Packing List CTA */}
+          <div className="bg-gradient-to-r from-accent to-accent/80 rounded-3xl shadow-xl p-8 md:p-10 mb-8 text-white">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                  <Package className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <h3 className="text-2xl font-bold mb-2">Ready to Pack?</h3>
+                <p className="text-white/90 text-lg">
+                  Now that you know your travel style, create a personalized packing list tailored to your next adventure!
+                </p>
+              </div>
+              <button
+                onClick={goToPackingList}
+                className="flex-shrink-0 bg-white text-accent px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap"
+              >
+                Personalize Your Packing List
+              </button>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="bg-white rounded-2xl shadow-lg p-6">
-            <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-secondary mb-2 font-gotham">
-                Ready to Share Your Travel Style?
-              </h3>
-              <p className="text-secondary-light">
-                Let the world know how you love to explore!
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto">
-              <button
-                onClick={shareResult}
-                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-medium shadow-sm"
-              >
-                <Share2 className="w-5 h-5" />
-                <span>Share Your Result</span>
-              </button>
-
-              <button
-                onClick={shareToInstagramStory}
-                disabled={isGeneratingStory}
-                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50 font-medium shadow-sm"
-              >
-                {isGeneratingStory ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                ) : (
-                  <Instagram className="w-5 h-5" />
-                )}
-                <span>{isGeneratingStory ? 'Generating...' : 'Instagram Story'}</span>
-              </button>
-              
-              <button
-                onClick={startQuiz}
-                className="flex items-center justify-center space-x-2 bg-accent hover:bg-accent-dark text-white px-6 py-3 rounded-lg transition-colors font-medium shadow-sm"
-              >
-                <RotateCcw className="w-5 h-5" />
-                <span>Take Again</span>
-              </button>
-              
-              <button
-                onClick={goHome}
-                className="flex items-center justify-center space-x-2 bg-white hover:bg-gray-50 text-secondary border border-neutral-light hover:border-accent px-6 py-3 rounded-lg transition-colors font-medium shadow-sm"
-              >
-                <Home className="w-5 h-5" />
-                <span>Back Home</span>
-              </button>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <button
+              onClick={shareResult}
+              className="flex items-center justify-center gap-3 bg-white border-2 border-primary/20 text-primary px-6 py-4 rounded-2xl font-semibold hover:bg-primary/5 transition-all duration-300 shadow-md hover:shadow-lg"
+            >
+              <Share2 className="w-5 h-5" />
+              Share Result
+            </button>
+            <button
+              onClick={shareToInstagramStory}
+              disabled={isGeneratingStory}
+              className="flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Instagram className="w-5 h-5" />
+              {isGeneratingStory ? 'Generating...' : 'Instagram Story'}
+            </button>
+            <button
+              onClick={restartQuiz}
+              className="flex items-center justify-center gap-3 bg-white border-2 border-accent/20 text-accent px-6 py-4 rounded-2xl font-semibold hover:bg-accent/5 transition-all duration-300 shadow-md hover:shadow-lg"
+            >
+              <RotateCcw className="w-5 h-5" />
+              Retake Quiz
+            </button>
           </div>
 
-          {/* Travel Butts Branding Footer */}
-          <div className="text-center mt-8 p-4 bg-white rounded-lg shadow-sm">
-            <div className="flex items-center justify-center space-x-2 mb-2">
-              {logoUrl && (
-                <img
-                  src={logoUrl}
-                  alt="Travel Butts logo"
-                  className="h-6 w-auto"
-                />
-              )}
-              <span className="text-lg font-bold text-secondary font-gotham">Travel Butts</span>
-            </div>
-            <p className="text-secondary-light text-sm">
-              Pack smart, travel light, explore more.
-            </p>
+          {/* Home Button */}
+          <div className="text-center">
+            <button
+              onClick={goHome}
+              className="inline-flex items-center gap-2 text-secondary-light hover:text-primary transition-colors duration-300"
+            >
+              <Home className="w-5 h-5" />
+              Back to Home
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
-  if (!questions[currentQuestion]) {
-    return (
-      <div className="min-h-screen bg-neutral-light flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-secondary-light">Loading quiz...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const question = questions[currentQuestion];
+  // Quiz in progress
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-neutral-light py-4 sm:py-8">
-      <div className="max-w-3xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-accent/5 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <button
-            onClick={goHome}
-            className="inline-flex items-center space-x-2 text-secondary-light hover:text-secondary mb-4 transition-colors text-sm"
-          >
-            <Home className="w-4 h-4" />
-            <span>Back to Home</span>
-          </button>
-          
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-accent rounded-full flex items-center justify-center">
-              <Compass className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-secondary">Travel Style Quiz</h1>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full mb-4 shadow-lg">
+            <Compass className="w-8 h-8 text-white" />
           </div>
-          
-          <div className="flex items-center justify-center space-x-4 sm:space-x-6 text-sm text-secondary-light">
-            <div className="flex items-center space-x-2">
-              <Target className="w-4 h-4" />
-              <span>Question {currentQuestion + 1}/15</span>
-            </div>
-          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
+            Travel Style Quiz
+          </h1>
+          <p className="text-secondary-light">
+            Discover your unique travel personality
+          </p>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-white rounded-full h-2 mb-6 sm:mb-8">
-          <div 
-            className="bg-accent h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentQuestion + 1) / 15) * 100}%` }}
-          ></div>
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium text-secondary">
+              Question {currentQuestion + 1} of {questions.length}
+            </span>
+            <span className="text-sm font-medium text-primary">
+              {Math.round(progress)}%
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
+            <div
+              className="bg-gradient-to-r from-primary to-accent h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
 
         {/* Question Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-8">
-          <div className="text-center mb-6 sm:mb-8">
-            <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
-              <Compass className="w-5 h-5 sm:w-6 sm:h-6 text-accent" />
-              <h2 className="text-lg sm:text-xl font-semibold text-secondary">Discover Your Travel Style</h2>
-            </div>
-            
-            <div className="text-xl sm:text-2xl font-bold text-secondary mb-4 sm:mb-6 leading-tight">
-              {question.question}
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-8">
+          <div className="mb-8">
+            <div className="flex items-start gap-4 mb-6">
+              <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                <Target className="w-5 h-5 text-primary" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-primary leading-tight">
+                {questions[currentQuestion].question}
+              </h2>
             </div>
           </div>
 
-          {/* Answer Options */}
+          {/* Options */}
           <div key={questionKey} className="space-y-3">
-            {question.options.map((option, index) => {
-              let buttonClass = "w-full p-3 sm:p-4 text-left border-2 rounded-xl transition-all duration-200 touch-manipulation quiz-option-button ";
-              
-              if (showResult) {
-                if (option.archetype === selectedAnswer) {
-                  buttonClass += "border-accent bg-accent bg-opacity-10 text-accent";
-                } else {
-                  buttonClass += "border-gray-200 bg-gray-50 text-gray-500";
-                }
-              } else {
-                // Always start with clean white background for new questions
-                buttonClass += "border-neutral-light bg-white text-secondary quiz-option-clean";
-              }
+            {questions[currentQuestion].options.map((option, index) => {
+              const isSelected = selectedAnswer === option.archetype;
+              const showFeedback = showResult && isSelected;
 
               return (
                 <button
-                  key={`${questionKey}-${index}`} // Force complete re-render
+                  key={index}
                   onClick={() => handleAnswerSelect(option.archetype)}
-                  disabled={showResult}
-                  className={buttonClass}
+                  disabled={selectedAnswer !== null}
+                  className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 ${
+                    showFeedback
+                      ? 'bg-primary border-primary text-white shadow-lg scale-[1.02]'
+                      : isSelected
+                      ? 'bg-primary/5 border-primary/30'
+                      : 'bg-white border-gray-200 hover:border-primary/30 hover:bg-primary/5'
+                  } ${
+                    selectedAnswer !== null && !isSelected
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'cursor-pointer'
+                  }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-left pr-4 text-sm sm:text-base leading-relaxed">
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                        showFeedback
+                          ? 'bg-white border-white'
+                          : isSelected
+                          ? 'bg-primary/10 border-primary'
+                          : 'border-gray-300'
+                      }`}
+                    >
+                      {showFeedback && (
+                        <CheckCircle className="w-5 h-5 text-primary" />
+                      )}
+                    </div>
+                    <span
+                      className={`text-lg font-medium ${
+                        showFeedback ? 'text-white' : 'text-secondary'
+                      }`}
+                    >
                       {option.text}
                     </span>
-                    {showResult && option.archetype === selectedAnswer && (
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0" />
-                    )}
                   </div>
                 </button>
               );
             })}
           </div>
+        </div>
 
-          {/* Result Feedback */}
-          {showResult && selectedAnswer && (
-            <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-accent bg-opacity-10 rounded-xl text-center">
-              <div className="text-accent">
-                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
-                <p className="font-semibold text-sm sm:text-base">
-                  That's very {selectedAnswer}!
-                </p>
-              </div>
-            </div>
-          )}
+        {/* Home Button */}
+        <div className="text-center">
+          <button
+            onClick={goHome}
+            className="inline-flex items-center gap-2 text-secondary-light hover:text-primary transition-colors duration-300"
+          >
+            <Home className="w-5 h-5" />
+            Back to Home
+          </button>
         </div>
       </div>
     </div>

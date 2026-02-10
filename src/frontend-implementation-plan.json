@@ -1,21 +1,22 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Rename Travel Tools shop tile and link it to the existing Shop route",
+  "title": "Add Packing List CTA on Travel Style Quiz results",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Rename the Travel Tools shop tile to “TravelButts shop” and make it navigate to the existing Shop route used by the app navigation.",
+      "summary": "Add a prominent English-labeled shortcut on the Travel Style Quiz completed/results view that navigates via hash routing to the existing #packing-list route.",
       "acceptanceCriteria": [
-        "In the Travel Tools grid, the tile label is “TravelButts shop” (matching capitalization and spacing exactly).",
-        "Clicking the “TravelButts shop” tile opens the app’s Shop page (the same route used elsewhere in the app for Shop), not “/coming-soon”.",
-        "No other labels elsewhere in the UI are changed as part of this rename."
+        "After completing the Travel Style Quiz and reaching the “Your Travel Style Revealed!” results view, a visible shortcut/CTA is rendered on that page.",
+        "Clicking/tapping the shortcut navigates using the app’s existing hash routing to #packing-list and renders the PackingList page.",
+        "The shortcut is not shown during the quiz questions flow (only on the completed/results view).",
+        "No new pages are created; the existing PackingList route in App.tsx is used."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/TravelToolsGrid.tsx",
+          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
           "operation": "modify",
-          "description": "Update the specific Travel Tools tile entry currently titled “Print on Demand Travel Products” to use the title exactly “TravelButts shop”, and change its navigation target from the coming-soon path to the existing Shop route used by the app (align with the hash route used by Shop navigation, e.g. “#shop”). Ensure only this tile’s label is changed and no other UI labels are modified."
+          "description": "In the quizCompleted/results render branch (the screen that shows the “Your Travel Style Revealed!” heading), add a prominent CTA element with an English label (e.g., “Personalize your packing list here”) that sets the hash navigation to '#packing-list' using the app’s existing hash-based pattern (e.g., window.location.hash = '#packing-list'), ensuring it is only rendered on the completed/results view and not during the question flow."
         }
       ]
     }

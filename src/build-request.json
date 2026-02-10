@@ -1,63 +1,38 @@
 {
   "kind": "build_request",
-  "title": "Rename Travel Tools shop tile and add one-time random baseline for blog view counts",
+  "title": "Add Packing List shortcut on Travel Style Quiz results page",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the Travel Tools tile currently titled “Print on Demand Travel Products” to display the title exactly as “TravelButts shop”, and make that tile navigate directly to the existing Shop page/route (use the same destination as the app’s current Shop navigation, not the coming-soon page).",
+      "text": "On the Travel Style Quiz results screen (the view that shows the heading “Your Travel Style Revealed!” after the quiz is completed), add a prominent call-to-action shortcut that navigates the user to the existing Packing List page route (#packing-list). The shortcut’s visible label must be in English (e.g., “Personalize your packing list here”).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-12",
-          "msg-13",
-          "msg-15"
+          "recent-messages"
         ],
         "quotes": [
-          "Kunnen we de print on demand travel products, TravelButts shop noemen inplaats van print on demand travel products.",
-          "De tile staat bij de traveltools, en ik wil alleen de naam wijzigen ja. en alleen op de tile want ergens anders komt het niet terug als het goed is. Het mag dan ook direct gelinked worden naar de shop",
-          "Ga je gang"
+          "Als de travel style quiz gemaakt is wil ik dat in de Your Travel Style Revealed! pagina een short cut komt naar Onze packing lists \"personaliseer hier je paklijst\"",
+          "Ja die mag linken naar onze Traveltools > Packing list",
+          "Begin maar"
         ]
       },
       "acceptanceCriteria": [
-        "In the Travel Tools grid, the tile label is “TravelButts shop” (matching capitalization and spacing exactly).",
-        "Clicking the “TravelButts shop” tile opens the app’s Shop page (the same route used elsewhere in the app for Shop), not “/coming-soon”.",
-        "No other labels elsewhere in the UI are changed as part of this rename."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Implement one-time view-count initialization for blog posts: when a blog post is opened for the first time and it has no persisted view count yet, set its initial view count to a random integer between 700 and 1000 (inclusive) and persist it; on subsequent opens, increment the persisted view count by exactly 1 per open.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-7",
-          "msg-8",
-          "msg-15"
-        ],
-        "quotes": [
-          "Ik heb een aantal blogs online staan op de live website die niet mee worden genomen in de random viewcount van 700-1000, hoe kan ik dit het beste oplossen?",
-          "Kan het ook opgelost worden om 1 malig, alle blogs die reeds online staan de opdracht tegeven de eerste keer dat ze nu geopend worden krijgen ze een random count van 700-1000 en dat word de viewcount, daarna gewoon over op 1 keer openen is 1 view",
-          "Ga je gang"
-        ]
-      },
-      "acceptanceCriteria": [
-        "If a blog post has no stored view count yet, the first call that records an open persists a random integer in the range [700, 1000] as the view count.",
-        "If a blog post already has a stored view count, each recorded open increases it by exactly 1.",
-        "The stored view count remains stable across page reloads and canister upgrades (i.e., it is persisted in canister state, not computed only on the frontend).",
-        "Existing blog posts that currently show no view count will start showing a numeric value after being opened once (because the backend initializes and persists the baseline)."
+        "After completing the Travel Style Quiz and reaching the “Your Travel Style Revealed!” results view, a visible shortcut/CTA is rendered on that page.",
+        "Clicking/tapping the shortcut navigates using the app’s existing hash routing to #packing-list and renders the PackingList page.",
+        "The shortcut is not shown during the quiz questions flow (only on the completed/results view).",
+        "No new pages are created; the existing PackingList route in App.tsx is used."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor in backend/main.mo (no additional backend services).",
-    "Do not modify files under frontend/src/components/ui or any paths listed as immutable in SYSTEM_CONTEXT.",
-    "Do not route any static assets through the backend."
+    "Frontend routing must use the existing hash-based navigation pattern (e.g., window.location.hash = '#packing-list' or an equivalent existing navigation approach).",
+    "Do not modify any files under frontend/src/components/ui or other frontend immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Importing or scraping blog posts from the live website into the canister is out of scope.",
-    "Changing blog content, blog IDs/slugs, or adding new blog management UX is out of scope.",
-    "Renaming any other occurrences of “Print on Demand Travel Products” outside the specific Travel Tools tile is out of scope."
+    "Do not change the quiz scoring, archetype logic, or any existing result content beyond adding the new shortcut.",
+    "Do not add or change backend (Motoko) functionality for this request.",
+    "Do not create a new Packing List feature/page; reuse the existing PackingList page/route."
   ],
   "imageRequirements": {
     "required": [],

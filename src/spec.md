@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Rename the Travel Tools shop tile and ensure blog posts get a persisted, one-time randomized baseline view count before normal per-open increments.
+**Goal:** Add a prominent shortcut on the Travel Style Quiz results page that takes users to the existing Packing List page.
 
 **Planned changes:**
-- Update the Travel Tools grid tile label from “Print on Demand Travel Products” to exactly “TravelButts shop”, without changing any other UI labels.
-- Change the “TravelButts shop” tile click target to navigate directly to the app’s existing Shop page/route (matching the current Shop navigation destination), not the coming-soon route.
-- Add backend logic for blog view counts: on first recorded open when no view count exists, persist a random integer in the range 700–1000 (inclusive); on subsequent opens, increment the stored value by exactly 1 per open.
+- Update the “Your Travel Style Revealed!” (quiz completed/results) view to render a visible call-to-action shortcut with an English label (e.g., “Personalize your packing list here”).
+- Wire the shortcut to navigate via existing hash routing to `#packing-list`, reusing the current PackingList route/page.
+- Ensure the shortcut appears only on the results view (not during the quiz question flow).
 
-**User-visible outcome:** The Travel Tools tile is renamed to “TravelButts shop” and opens the real Shop page, and blog posts that previously had no view count will show a persisted number after being opened once, then increase by 1 on each subsequent open.
+**User-visible outcome:** After finishing the Travel Style Quiz and seeing “Your Travel Style Revealed!”, users can tap/click a prominent CTA to jump directly to the existing Packing List page.

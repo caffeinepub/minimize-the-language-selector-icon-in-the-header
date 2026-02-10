@@ -1,16 +1,14 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Add a shortcut link on the Travel Style Quiz results page (“Your Travel Style Revealed!”) to Traveltools > Packing list, labeled “personaliseer hier je paklijst”.",
   "architectural_notes": [],
-  "known_issues": [
-    "Bestaande live blogs worden niet meegenomen in de viewcount-logica (random 700–1000 / view tracking)"
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-travel-tools-tile-currently-titled-print-on-demand-travel-products-to-display-the-title-exactly-as-travelbutts-shop-and-make-that-tile-navigate-directly-to-the-existing-shop-page-route-use-the-same-destination-as-the-app-s-current-shop-navigation-not-the-coming-soon-page",
-      "title": "Update the Travel Tools tile currently titled “Print on Demand Travel Products” to display the title exactly as “TravelButts shop”, and make that tile navigate directly to the existing Shop page/route (use the same destination as the app’s current Shop navigation, not the coming-soon page).",
+      "id": "feature-on-the-travel-style-quiz-results-screen-the-view-that-shows-the-heading-your-travel-style-revealed-after-the-quiz-is-completed-add-a-prominent-call-to-action-shortcut-that-navigates-the-user-to-the-existing-packing-list-page-route-packing-list-the-shortcut-s-visible-label-must-be-in-english-e-g-personalize-your-packing-list-here",
+      "title": "On the Travel Style Quiz results screen (the view that shows the heading “Your Travel Style Revealed!” after the quiz is completed), add a prominent call-to-action shortcut that navigates the user to the existing Packing List page route (#packing-list). The shortcut’s visible label must be in English (e.g., “Personalize your packing list here”).",
       "reqIds": [
         "REQ-1"
       ],
@@ -20,26 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Geef bestaande live blogs bij eerste open eenmalig een random start-viewcount (700–1000) en tel daarna per open +1 view",
+      "summary": "Add a shortcut/link on the “Your Travel Style Revealed!” (quiz results) page to Traveltools > Packing list with label “personaliseer hier je paklijst”.",
       "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Wijzig de traveltools-tile tekst van “print on demand travel products” naar “TravelButts shop” en laat de tile direct linken naar de shop",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Implement one-time view-count initialization for blog posts: when a blog post is opened for the first time and it has no persisted view count yet, set its initial view count to a random integer between 700 and 1000 (inclusive) and persist it; on subsequent opens, increment the persisted view count by exactly 1 per open.",
-      "reqIds": [
-        "REQ-2"
-      ],
       "status": "pending"
     }
   ],
-  "projectName": "Rename Travel Tools shop tile and add one-time random baseline for blog view counts",
+  "projectName": "Add Packing List shortcut on Travel Style Quiz results page",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
