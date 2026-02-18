@@ -11,10 +11,18 @@ interface HomePageProps {
 export default function HomePage({ onBlogClick }: HomePageProps) {
   return (
     <>
-      <HeroSection />
-      <BlogSection onBlogClick={onBlogClick} />
-      <ShopSection />
-      <ContactSection />
+      <div className="bg-white">
+        <HeroSection />
+      </div>
+      <div className="bg-neutral-light">
+        <BlogSection onBlogClick={onBlogClick} />
+      </div>
+      <div className="bg-white">
+        <ShopSection />
+      </div>
+      <div className="bg-neutral-light">
+        <ContactSection />
+      </div>
     </>
   );
 }

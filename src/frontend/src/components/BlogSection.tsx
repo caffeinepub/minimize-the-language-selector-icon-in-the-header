@@ -139,7 +139,7 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
     : [];
 
   return (
-    <section id="blog" className="py-20 bg-neutral-light">
+    <section id="blog" className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-4 mb-4">
@@ -305,16 +305,17 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
                             />
                             <button
                               onClick={(e) => toggleVideoPlay(item.id, e)}
-                              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 group-hover:bg-opacity-30 transition-all"
                             >
                               {playingVideos.has(item.id) ? (
-                                <Pause className="w-12 h-12 text-white" />
+                                <Pause className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
                               ) : (
-                                <Play className="w-12 h-12 text-white" />
+                                <Play className="w-12 h-12 text-white opacity-80 group-hover:opacity-100 transition-opacity" />
                               )}
                             </button>
-                            <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
-                              <Video className="w-4 h-4 text-white" />
+                            <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+                              <Video className="w-3 h-3" />
+                              <span>Video</span>
                             </div>
                           </>
                         ) : (
@@ -325,19 +326,20 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                               loading="lazy"
                             />
-                            <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
-                              <ImageIcon className="w-4 h-4 text-white" />
+                            <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs flex items-center space-x-1">
+                              <ImageIcon className="w-3 h-3" />
+                              <span>Photo</span>
                             </div>
                           </>
                         )}
                         {item.link && (
-                          <div className="absolute bottom-2 right-2 bg-white bg-opacity-90 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <ExternalLink className="w-4 h-4 text-secondary" />
+                          <div className="absolute top-3 right-3 bg-black bg-opacity-70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <ExternalLink className="w-4 h-4" />
                           </div>
                         )}
                       </div>
                       <div className="p-4">
-                        <p className="text-secondary-light text-sm line-clamp-3">
+                        <p className="text-secondary text-sm line-clamp-3">
                           {item.caption}
                         </p>
                       </div>
@@ -354,11 +356,8 @@ export default function BlogSection({ onBlogClick }: BlogSectionProps) {
         </div>
       </div>
 
-      {/* Blog Post Modal */}
       {showBlogModal && (
-        <BlogPostModal
-          onClose={() => setShowBlogModal(false)}
-        />
+        <BlogPostModal onClose={() => setShowBlogModal(false)} />
       )}
     </section>
   );

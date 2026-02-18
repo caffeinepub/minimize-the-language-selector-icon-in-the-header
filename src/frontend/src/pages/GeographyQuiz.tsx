@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Flag, RotateCcw, Home, Trophy, Target, CheckCircle, XCircle, Share2, Instagram } from 'lucide-react';
+import { MapPin, Flag, RotateCcw, Home, Trophy, Target, Share2, Instagram } from 'lucide-react';
 import { useFileUrl } from '../blob-storage/FileStorage';
 import { generateGeographyQuizStory, downloadInstagramStory } from '../utils/instagramStoryGenerator';
 import { showToast } from '../utils/toast';
+import { QuizPage } from '../components/quiz/QuizPage';
+import { QuizCard } from '../components/quiz/QuizCard';
+import { QuizProgress } from '../components/quiz/QuizProgress';
+import { QuizOptionButton } from '../components/quiz/QuizOptionButton';
+import { QuizActionButton } from '../components/quiz/QuizActionButton';
 
 interface Country {
   name: string;
@@ -391,232 +396,136 @@ export default function GeographyQuiz() {
     }
 
     return (
-      <div className="min-h-screen bg-neutral-light py-8">
-        <div className="max-w-2xl mx-auto px-4">
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
-              <Trophy className="w-10 h-10 text-white" />
+      <QuizPage>
+        <QuizCard className="text-center">
+          <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+            <Trophy className="w-10 h-10 text-white" />
+          </div>
+          
+          <h1 className="text-3xl font-bold text-secondary mb-4">Quiz Complete!</h1>
+          
+          <div className="text-6xl mb-4">{emoji}</div>
+          
+          <div className="bg-neutral-light rounded-xl p-6 mb-6">
+            <div className="text-4xl font-bold text-accent mb-2">
+              {score}/{totalQuestions}
             </div>
-            
-            <h1 className="text-3xl font-bold text-secondary mb-4">Quiz Complete!</h1>
-            
-            <div className="text-6xl mb-4">{emoji}</div>
-            
-            <div className="bg-neutral-light rounded-xl p-6 mb-6">
-              <div className="text-4xl font-bold text-accent mb-2">
-                {score}/{totalQuestions}
-              </div>
-              <div className="text-lg text-secondary-light">
-                {percentage}% Correct
-              </div>
-            </div>
-            
-            <p className="text-lg text-secondary mb-8">{message}</p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={shareResult}
-                className="flex items-center justify-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors"
-              >
-                <Share2 className="w-5 h-5" />
-                <span>Share Your Result</span>
-              </button>
-
-              <button
-                onClick={shareToInstagramStory}
-                disabled={isGeneratingStory}
-                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white px-6 py-3 rounded-lg transition-colors disabled:opacity-50"
-              >
-                {isGeneratingStory ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                ) : (
-                  <Instagram className="w-5 h-5" />
-                )}
-                <span>{isGeneratingStory ? 'Generating...' : 'Share to Instagram Story'}</span>
-              </button>
-              
-              <button
-                onClick={startQuiz}
-                className="flex items-center justify-center space-x-2 bg-accent hover:bg-accent-dark text-white px-6 py-3 rounded-lg transition-colors"
-              >
-                <RotateCcw className="w-5 h-5" />
-                <span>Try Again</span>
-              </button>
-              
-              <button
-                onClick={goHome}
-                className="flex items-center justify-center space-x-2 bg-white hover:bg-gray-50 text-secondary border border-neutral-light px-6 py-3 rounded-lg transition-colors"
-              >
-                <Home className="w-5 h-5" />
-                <span>Back to Home</span>
-              </button>
+            <div className="text-lg text-secondary-light">
+              {percentage}% Correct
             </div>
           </div>
-        </div>
-      </div>
+          
+          <p className="text-lg text-secondary mb-8">{message}</p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <QuizActionButton
+              onClick={shareResult}
+              icon={Share2}
+              text="Share Your Result"
+              variant="primary"
+            />
+
+            <QuizActionButton
+              onClick={shareToInstagramStory}
+              icon={Instagram}
+              text={isGeneratingStory ? 'Generating...' : 'Instagram Story'}
+              variant="gradient"
+              disabled={isGeneratingStory}
+            />
+
+            <QuizActionButton
+              onClick={startQuiz}
+              icon={RotateCcw}
+              text="Try Again"
+              variant="secondary"
+            />
+
+            <QuizActionButton
+              onClick={goHome}
+              icon={Home}
+              text="Home"
+              variant="secondary"
+            />
+          </div>
+        </QuizCard>
+      </QuizPage>
     );
   }
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-neutral-light flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto mb-4"></div>
-          <p className="text-secondary-light">Loading quiz...</p>
-        </div>
-      </div>
+      <QuizPage>
+        <QuizCard className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
+          <p className="mt-4 text-secondary-light">Loading quiz...</p>
+        </QuizCard>
+      </QuizPage>
     );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-light py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <button
-            onClick={goHome}
-            className="inline-flex items-center space-x-2 text-secondary-light hover:text-secondary mb-4 transition-colors"
-          >
-            <Home className="w-4 h-4" />
-            <span>Back to Home</span>
-          </button>
-          
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-secondary">Geography Quiz Challenge</h1>
+    <QuizPage>
+      <QuizCard>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-2">
+            {currentQuestion.type === 'flag' ? (
+              <Flag className="w-6 h-6 text-accent" />
+            ) : (
+              <MapPin className="w-6 h-6 text-accent" />
+            )}
+            <h1 className="text-2xl font-bold text-secondary">Geography Quiz</h1>
           </div>
-          
-          <div className="flex items-center justify-center space-x-6 text-sm text-secondary-light">
-            <div className="flex items-center space-x-2">
-              <Target className="w-4 h-4" />
-              <span>Question {questionNumber}/{totalQuestions}</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Trophy className="w-4 h-4" />
-              <span>Score: {score}</span>
-            </div>
+          <div className="flex items-center space-x-2 text-accent">
+            <Target className="w-5 h-5" />
+            <span className="font-semibold">{score}/{totalQuestions}</span>
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full bg-white rounded-full h-2 mb-8">
-          <div 
-            className="bg-accent h-2 rounded-full transition-all duration-300"
-            style={{ width: `${(questionNumber / totalQuestions) * 100}%` }}
-          ></div>
-        </div>
+        <QuizProgress current={questionNumber} total={totalQuestions} />
 
-        {/* Question Card */}
-        <div className="bg-white rounded-2xl shadow-lg p-8">
-          {currentQuestion.type === 'flag' ? (
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center space-x-3 mb-6">
-                <Flag className="w-6 h-6 text-accent" />
-                <h2 className="text-xl font-semibold text-secondary">Guess the Country</h2>
-              </div>
-              
-              <div className="mb-6 flex justify-center">
-                <div className="relative w-80 h-48 bg-gray-100 rounded-lg overflow-hidden shadow-md border border-neutral-light">
-                  {!flagImageError ? (
-                    <img
-                      src={getFlagImageUrl(currentQuestion.country.code)}
-                      alt={`Flag of ${currentQuestion.country.name}`}
-                      className="w-full h-full object-cover"
-                      onError={handleFlagImageError}
-                      onLoad={() => setFlagImageError(false)}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
-                      <div className="text-center">
-                        <Flag className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                        <p className="text-gray-500 text-sm">Flag Image</p>
-                        <p className="text-gray-400 text-xs">Loading...</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <p className="text-secondary-light mb-8">Which country does this flag represent?</p>
-            </div>
-          ) : (
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center space-x-3 mb-6">
-                <MapPin className="w-6 h-6 text-accent" />
-                <h2 className="text-xl font-semibold text-secondary">What's the Capital?</h2>
-              </div>
-              
-              <div className="text-4xl font-bold text-accent mb-6">
-                {currentQuestion.country.name}
-              </div>
-              
-              <p className="text-secondary-light mb-8">What is the capital city of this country?</p>
-            </div>
-          )}
-
-          {/* Answer Options */}
-          <div className="space-y-4">
-            {currentQuestion.options.map((option, index) => {
-              let buttonClass = "w-full p-4 text-left border-2 rounded-xl transition-all duration-200 ";
-              
-              if (showResult) {
-                if (option === currentQuestion.correctAnswer) {
-                  buttonClass += "border-green-500 bg-green-50 text-green-800";
-                } else if (option === selectedAnswer && option !== currentQuestion.correctAnswer) {
-                  buttonClass += "border-red-500 bg-red-50 text-red-800";
-                } else {
-                  buttonClass += "border-gray-200 bg-gray-50 text-gray-500";
-                }
-              } else {
-                buttonClass += "border-neutral-light hover:border-accent hover:bg-accent hover:bg-opacity-5 text-secondary";
-              }
-
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(option)}
-                  disabled={showResult}
-                  className={buttonClass}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-left">{option}</span>
-                    {showResult && (
-                      <div>
-                        {option === currentQuestion.correctAnswer ? (
-                          <CheckCircle className="w-5 h-5 text-green-600" />
-                        ) : option === selectedAnswer ? (
-                          <XCircle className="w-5 h-5 text-red-600" />
-                        ) : null}
-                      </div>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Result Feedback */}
-          {showResult && (
-            <div className="mt-6 p-4 rounded-xl text-center">
-              {selectedAnswer === currentQuestion.correctAnswer ? (
-                <div className="text-green-600">
-                  <CheckCircle className="w-8 h-8 mx-auto mb-2" />
-                  <p className="font-semibold">Correct! Well done!</p>
-                </div>
+        {currentQuestion.type === 'flag' ? (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-secondary mb-4 text-center">
+              Which country does this flag belong to?
+            </h2>
+            <div className="flex justify-center mb-6">
+              {!flagImageError ? (
+                <img
+                  src={getFlagImageUrl(currentQuestion.country.code)}
+                  alt="Country flag"
+                  className="w-64 h-auto rounded-lg shadow-md"
+                  onError={handleFlagImageError}
+                />
               ) : (
-                <div className="text-red-600">
-                  <XCircle className="w-8 h-8 mx-auto mb-2" />
-                  <p className="font-semibold">
-                    Incorrect. The correct answer is {currentQuestion.correctAnswer}.
-                  </p>
+                <div className="w-64 h-40 bg-neutral-light rounded-lg flex items-center justify-center">
+                  <Flag className="w-16 h-16 text-neutral" />
                 </div>
               )}
             </div>
-          )}
+          </div>
+        ) : (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-secondary mb-4 text-center">
+              What is the capital of {currentQuestion.country.name}?
+            </h2>
+          </div>
+        )}
+
+        <div className="space-y-3">
+          {currentQuestion.options.map((option, index) => (
+            <QuizOptionButton
+              key={index}
+              text={option}
+              onClick={() => handleAnswerSelect(option)}
+              disabled={!!selectedAnswer}
+              isSelected={selectedAnswer === option}
+              isCorrect={showResult && option === currentQuestion.correctAnswer}
+              isIncorrect={showResult && selectedAnswer === option && option !== currentQuestion.correctAnswer}
+              showFeedback={showResult}
+            />
+          ))}
         </div>
-      </div>
-    </div>
+      </QuizCard>
+    </QuizPage>
   );
 }

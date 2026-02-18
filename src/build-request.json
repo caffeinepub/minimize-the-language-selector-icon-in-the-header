@@ -1,38 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Add Packing List shortcut on Travel Style Quiz results page",
+  "title": "Refine Travel Style Quiz results styling: color only the section tiles",
+  "projectName": "TravelButts Quiz",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "On the Travel Style Quiz results screen (the view that shows the heading “Your Travel Style Revealed!” after the quiz is completed), add a prominent call-to-action shortcut that navigates the user to the existing Packing List page route (#packing-list). The shortcut’s visible label must be in English (e.g., “Personalize your packing list here”).",
+      "text": "Update the Travel Style Quiz finishing/results page so the three result sections (“Your Travel Style”, “Your Ideal Destinations”, and “Your Personal Packing List”) render as distinct tiles with a filled background using the same background color currently used by the “Your Ideal Destinations” section, and do not render a full-width colored stripe behind the tiles.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages"
+          "msg-6",
+          "msg-7",
+          "msg-8"
         ],
         "quotes": [
-          "Als de travel style quiz gemaakt is wil ik dat in de Your Travel Style Revealed! pagina een short cut komt naar Onze packing lists \"personaliseer hier je paklijst\"",
-          "Ja die mag linken naar onze Traveltools > Packing list",
-          "Begin maar"
+          "Use the background color of Your Ideal Destinations",
+          "I want only the sections to have the color not the entire stripe behind it",
+          "I said border but i ment actually the tile, all tiles can have the travelbutts background color"
         ]
       },
       "acceptanceCriteria": [
-        "After completing the Travel Style Quiz and reaching the “Your Travel Style Revealed!” results view, a visible shortcut/CTA is rendered on that page.",
-        "Clicking/tapping the shortcut navigates using the app’s existing hash routing to #packing-list and renders the PackingList page.",
-        "The shortcut is not shown during the quiz questions flow (only on the completed/results view).",
-        "No new pages are created; the existing PackingList route in App.tsx is used."
+        "On the Travel Style Quiz finishing/results screen, there is no full-width colored band/stripe behind any of the three result sections.",
+        "Each of the three result sections is visually presented as a tile/card with a filled background color matching the “Your Ideal Destinations” section background color.",
+        "The tile background color is applied to the tile/card itself (not the entire page width)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Make the borders for the three finishing/results section tiles use the same border color and general border treatment as other tiles used elsewhere on the site (consistent thickness, radius, and overall look).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7"
+        ],
+        "quotes": [
+          "The borders can have the same color as all the other tiles on the website"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All three finishing/results tiles use the same border color as the site’s existing tile border styling.",
+        "Border styling is consistent across the three tiles (same radius, thickness, and visual weight)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Adjust the quiz page-level background styling so the Travel Style Quiz finishing/results screen does not appear as a single full-page colored block; ensure only the tiles carry the “Your Ideal Destinations” background color.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6",
+          "msg-8"
+        ],
+        "quotes": [
+          "i want only the sections to have the color not the entire stripe behind it",
+          "Go when you are ready"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The finishing/results screen background behind the tiles is not the same filled brand/section color; instead, the color is confined to the tiles.",
+        "Spacing/padding around the tiles remains clean and consistent after the background change."
       ]
     }
   ],
   "constraints": [
-    "Frontend routing must use the existing hash-based navigation pattern (e.g., window.location.hash = '#packing-list' or an equivalent existing navigation approach).",
-    "Do not modify any files under frontend/src/components/ui or other frontend immutable paths listed in SYSTEM_CONTEXT."
+    "Do not edit any files under frontend/src/components/ui or any path listed in frontend.immutablePaths.",
+    "Keep all changes within the existing React + TypeScript + Tailwind setup; no new backend canisters or external services."
   ],
   "nonGoals": [
-    "Do not change the quiz scoring, archetype logic, or any existing result content beyond adding the new shortcut.",
-    "Do not add or change backend (Motoko) functionality for this request.",
-    "Do not create a new Packing List feature/page; reuse the existing PackingList page/route."
+    "No changes to quiz questions, scoring logic, destinations data, or story generation.",
+    "No redesign of other pages beyond what is necessary to achieve the tile-only background styling on the Travel Style Quiz finishing/results UI."
   ],
   "imageRequirements": {
     "required": [],

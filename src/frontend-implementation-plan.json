@@ -1,22 +1,61 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add Packing List CTA on Travel Style Quiz results",
+  "title": "Travel Style Quiz results: tile-only brand background and consistent borders",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Add a prominent English-labeled shortcut on the Travel Style Quiz completed/results view that navigates via hash routing to the existing #packing-list route.",
+      "summary": "Render the three results sections as distinct tiles/cards with the brand background color applied only to the tiles (no full-width colored stripe).",
       "acceptanceCriteria": [
-        "After completing the Travel Style Quiz and reaching the “Your Travel Style Revealed!” results view, a visible shortcut/CTA is rendered on that page.",
-        "Clicking/tapping the shortcut navigates using the app’s existing hash routing to #packing-list and renders the PackingList page.",
-        "The shortcut is not shown during the quiz questions flow (only on the completed/results view).",
-        "No new pages are created; the existing PackingList route in App.tsx is used."
+        "On the Travel Style Quiz finishing/results screen, there is no full-width colored band/stripe behind any of the three result sections.",
+        "Each of the three result sections is visually presented as a tile/card with a filled background color matching the “Your Ideal Destinations” section background color.",
+        "The tile background color is applied to the tile/card itself (not the entire page width)."
       ],
       "file_operations": [
         {
+          "path": "frontend/src/components/quiz/QuizResultSection.tsx",
+          "operation": "modify",
+          "description": "Move the 'brand' background treatment from the full-width wrapper to the inner card container so only the tile is filled (no full-width stripe). Keep spacing/container layout so each section reads as its own tile."
+        },
+        {
           "path": "frontend/src/pages/TravelStyleQuiz.tsx",
           "operation": "modify",
-          "description": "In the quizCompleted/results render branch (the screen that shows the “Your Travel Style Revealed!” heading), add a prominent CTA element with an English label (e.g., “Personalize your packing list here”) that sets the hash navigation to '#packing-list' using the app’s existing hash-based pattern (e.g., window.location.hash = '#packing-list'), ensuring it is only rendered on the completed/results view and not during the question flow."
+          "description": "Ensure all three results sections (“Your Travel Style”, “Your Ideal Destinations”, “Your Personal Packing List”) use the same 'brand' tile variant/background, and confirm the sections are rendered as separate stacked tiles (not visually merging into a single band)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Make the three results tiles use the same border color and general border treatment as other site tiles (radius/thickness/weight).",
+      "acceptanceCriteria": [
+        "All three finishing/results tiles use the same border color as the site’s existing tile border styling.",
+        "Border styling is consistent across the three tiles (same radius, thickness, and visual weight)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/quiz/QuizResultSection.tsx",
+          "operation": "modify",
+          "description": "Update the results tile/card container styling to match existing tile conventions used elsewhere (e.g., rounded-xl + subtle shadow + border using the site’s existing tile border color such as border-neutral-light), and apply it consistently for all variants."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Adjust results screen page-level background so the screen is not a single full-page colored block; confine brand color to tiles only and keep clean spacing around tiles.",
+      "acceptanceCriteria": [
+        "The finishing/results screen background behind the tiles is not the same filled brand/section color; instead, the color is confined to the tiles.",
+        "Spacing/padding around the tiles remains clean and consistent after the background change."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/quiz/QuizPage.tsx",
+          "operation": "modify",
+          "description": "Change the quiz page wrapper background so the overall finishing/results screen is not rendered as a full-page brand-colored block; use the site’s normal page background and preserve existing vertical spacing/padding."
+        },
+        {
+          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
+          "operation": "modify",
+          "description": "Verify the finishing/results layout still has consistent spacing between tiles and around the results content after the QuizPage background change (adjust only layout classes in this page if needed)."
         }
       ]
     }

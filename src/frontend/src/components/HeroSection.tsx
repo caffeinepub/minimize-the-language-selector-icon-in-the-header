@@ -20,7 +20,7 @@ export default function HeroSection() {
   }, [refetchHeroImage]);
 
   return (
-    <section className="relative bg-white">
+    <section className="relative">
       {/* Admin Upload Interface */}
       {isAdmin && identity && (
         <div className="absolute top-4 left-4 z-10">
@@ -55,7 +55,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Half - Travel Tools */}
-          <div className="w-1/2 bg-white flex items-center justify-center p-8 xl:p-12">
+          <div className="w-1/2 flex items-center justify-center p-8 xl:p-12">
             <div className="w-full max-w-2xl">
               <TravelToolsGrid />
             </div>
@@ -83,7 +83,7 @@ export default function HeroSection() {
           </div>
 
           {/* Content - Takes remaining space */}
-          <div className="flex-1 bg-white flex items-center justify-center p-8">
+          <div className="flex-1 flex items-center justify-center p-8">
             <div className="w-full max-w-4xl text-center">
               <TravelToolsGrid />
             </div>
@@ -130,7 +130,7 @@ export default function HeroSection() {
           </div>
 
           {/* Content - Enhanced mobile layout with proper spacing */}
-          <div className="flex-1 bg-white hero-content-mobile">
+          <div className="flex-1 hero-content-mobile">
             <div className="w-full max-w-lg mx-auto text-center px-4 py-8">
               <TravelToolsGrid />
             </div>

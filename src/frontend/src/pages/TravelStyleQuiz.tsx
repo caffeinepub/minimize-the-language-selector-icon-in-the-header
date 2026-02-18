@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Compass, RotateCcw, Home, Trophy, Target, CheckCircle, Share2, Instagram, Star, Award, Package } from 'lucide-react';
+import React, { useState } from 'react';
+import { Compass, RotateCcw, Home, Share2, Instagram, Package, MapPin, User, Luggage } from 'lucide-react';
 import { useFileUrl } from '../blob-storage/FileStorage';
 import { generateTravelStyleQuizStory, downloadInstagramStory } from '../utils/instagramStoryGenerator';
 import { showToast } from '../utils/toast';
+import { QuizPage } from '../components/quiz/QuizPage';
+import { QuizCard } from '../components/quiz/QuizCard';
+import { QuizProgress } from '../components/quiz/QuizProgress';
+import { QuizOptionButton } from '../components/quiz/QuizOptionButton';
+import { QuizActionButton } from '../components/quiz/QuizActionButton';
+import { QuizResultSection } from '../components/quiz/QuizResultSection';
+import { getPersonalityProfile } from '../features/travelStyleQuiz/personalityProfile';
+import { getPackingListTeaser } from '../features/travelStyleQuiz/packingListTeaser';
+import { useIdealDestinations } from '../features/travelStyleQuiz/useIdealDestinations';
 
 interface TravelArchetype {
   name: string;
@@ -284,9 +293,15 @@ export default function TravelStyleQuiz() {
     secondary?: TravelArchetype;
     isBlended: boolean;
   } | null>(null);
-  const [questionKey, setQuestionKey] = useState(0); // Force re-render of options
+  const [questionKey, setQuestionKey] = useState(0);
   const [isGeneratingStory, setIsGeneratingStory] = useState(false);
   const { data: logoUrl } = useFileUrl('assets/travel-butts-logo.png');
+
+  // Call hooks unconditionally at the top level
+  const { destinations } = useIdealDestinations(
+    results?.primary || archetypes['Thrill Seeker'],
+    results?.secondary
+  );
 
   const handleAnswerSelect = (archetype: string) => {
     if (selectedAnswer) return;
@@ -294,28 +309,24 @@ export default function TravelStyleQuiz() {
     setSelectedAnswer(archetype);
     setShowResult(true);
     
-    // Update scores
     const newScores = { ...scores };
     newScores[archetype] += 1;
     setScores(newScores);
     
-    // Auto-advance after 1.5 seconds
     setTimeout(() => {
       if (currentQuestion >= questions.length - 1) {
         calculateResults(newScores);
         setQuizCompleted(true);
       } else {
         setCurrentQuestion(currentQuestion + 1);
-        // Reset states for next question and force re-render
         setSelectedAnswer(null);
         setShowResult(false);
-        setQuestionKey(prev => prev + 1); // Force complete re-render of options
+        setQuestionKey(prev => prev + 1);
       }
     }, 1500);
   };
 
   const calculateResults = (finalScores: Record<string, number>) => {
-    // Sort archetypes by score
     const sortedArchetypes = Object.entries(finalScores)
       .sort(([,a], [,b]) => b - a)
       .map(([name, score]) => ({ name, score }));
@@ -325,7 +336,6 @@ export default function TravelStyleQuiz() {
     
     const primary = archetypes[sortedArchetypes[0].name];
     
-    // Check if there's a tie for the top spot or close second
     const isBlended = topScore === secondScore || (topScore - secondScore <= 1 && secondScore >= 3);
     const secondary = isBlended ? archetypes[sortedArchetypes[1].name] : undefined;
     
@@ -345,41 +355,34 @@ export default function TravelStyleQuiz() {
 
     if (navigator.share) {
       navigator.share({
-        title: 'My Travel Style Result',
+        title: 'My Travel Style',
         text: shareText,
-        url: `${window.location.origin}#travel-style-quiz`
-      }).catch(console.error);
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(shareText).then(() => {
-        showToast('Quiz result copied to clipboard! You can now paste it anywhere to share.', 'success');
       }).catch(() => {
-        // Final fallback: show share text in alert
-        alert(`Share your result:\n\n${shareText}`);
+        navigator.clipboard.writeText(shareText);
+        showToast('Result copied to clipboard!', 'success');
       });
+    } else {
+      navigator.clipboard.writeText(shareText);
+      showToast('Result copied to clipboard!', 'success');
     }
   };
 
-  const shareToInstagramStory = async () => {
-    if (!results || isGeneratingStory) return;
+  const generateStory = async () => {
+    if (!results) return;
     
     setIsGeneratingStory(true);
-    
     try {
-      const storyImageUrl = await generateTravelStyleQuizStory(
+      const storyDataUrl = await generateTravelStyleQuizStory(
         results.primary,
         results.isBlended,
         results.secondary,
-        logoUrl
+        logoUrl || undefined
       );
-      
-      const filename = `travel-style-${results.primary.name.toLowerCase().replace(/\s+/g, '-')}.png`;
-      
-      downloadInstagramStory(storyImageUrl, filename);
-      showToast('Instagram Story image downloaded! Upload it to your Instagram Story to share your result.', 'success');
+      await downloadInstagramStory(storyDataUrl, 'travel-style-quiz');
+      showToast('Instagram story downloaded!', 'success');
     } catch (error) {
-      console.error('Error generating Instagram story:', error);
-      showToast('Failed to generate Instagram story. Please try again.', 'error');
+      console.error('Error generating story:', error);
+      showToast('Failed to generate story', 'error');
     } finally {
       setIsGeneratingStory(false);
     }
@@ -401,263 +404,259 @@ export default function TravelStyleQuiz() {
     setQuizCompleted(false);
     setResults(null);
     setQuestionKey(0);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const goHome = () => {
     window.location.hash = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const goToPackingList = () => {
-    window.location.hash = '#packing-list';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Quiz completed - show results
   if (quizCompleted && results) {
+    const personalityProfile = getPersonalityProfile(results.primary, results.secondary);
+    const packingListTeaser = getPackingListTeaser(results.primary, results.secondary);
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-accent/5 py-12 px-4">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-full mb-6 shadow-lg">
-              <Trophy className="w-10 h-10 text-white" />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Your Travel Style Revealed!
-            </h1>
-            <p className="text-lg text-secondary-light">
-              Discover what makes your travel adventures unique
-            </p>
-          </div>
+      <QuizPage>
+        <div className="space-y-0">
+          {/* Section 1: Your Travel Style */}
+          <QuizResultSection variant="brand">
+            <div className="text-center space-y-6">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-lg mb-4 animate-bounce">
+                <span className="text-6xl">{results.primary.emoji}</span>
+              </div>
+              
+              <div>
+                <h2 className="text-4xl font-bold text-secondary mb-2">
+                  {results.isBlended && results.secondary ? (
+                    <>
+                      {results.primary.name} <span className="text-accent">×</span> {results.secondary.name}
+                    </>
+                  ) : (
+                    results.primary.name
+                  )}
+                </h2>
+                <p className="text-lg text-secondary-light">
+                  {results.primary.description}
+                </p>
+                {results.isBlended && results.secondary && (
+                  <p className="text-md text-secondary-light mt-3 italic">
+                    With a touch of {results.secondary.name} {results.secondary.emoji}
+                  </p>
+                )}
+              </div>
 
-          {/* Primary Result */}
-          <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-8 border-2 border-primary/10">
-            <div className="text-center mb-8">
-              <div className="text-7xl mb-4">{results.primary.emoji}</div>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-                {results.primary.name}
-              </h2>
-              <p className="text-lg text-secondary-light leading-relaxed">
-                {results.primary.description}
-              </p>
-            </div>
+              <div className="bg-white rounded-xl p-6 shadow-md">
+                <div className="flex items-start gap-3 mb-4">
+                  <User className="w-6 h-6 text-accent flex-shrink-0 mt-1" />
+                  <div className="text-left">
+                    <h3 className="font-semibold text-secondary text-lg mb-2">
+                      This is you when you travel
+                    </h3>
+                    <ul className="space-y-2">
+                      {personalityProfile.bullets.map((bullet, index) => (
+                        <li key={index} className="text-secondary-light flex items-start gap-2">
+                          <span className="text-accent mt-1">•</span>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="bg-neutral-light rounded-lg p-4 mt-4">
+                  <p className="text-secondary font-medium italic">
+                    "{personalityProfile.callout}"
+                  </p>
+                </div>
+              </div>
 
-            {/* Traits */}
-            <div className="mb-8">
-              <h3 className="text-xl font-semibold text-primary mb-4 flex items-center justify-center gap-2">
-                <Star className="w-5 h-5" />
-                Your Travel Traits
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {results.primary.traits.map((trait, index) => (
+              <div className="flex flex-wrap gap-3 justify-center pt-4">
+                <QuizActionButton
+                  onClick={shareResult}
+                  icon={Share2}
+                  text="Share Result"
+                  variant="secondary"
+                />
+                <QuizActionButton
+                  onClick={generateStory}
+                  icon={Instagram}
+                  text={isGeneratingStory ? 'Generating...' : 'Instagram Story'}
+                  variant="gradient"
+                  disabled={isGeneratingStory}
+                />
+              </div>
+            </div>
+          </QuizResultSection>
+
+          {/* Section 2: Your Ideal Destinations */}
+          <QuizResultSection variant="brand">
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-md mb-4">
+                  <MapPin className="w-8 h-8 text-accent" />
+                </div>
+                <h3 className="text-3xl font-bold text-secondary mb-2">
+                  Your Ideal Destinations
+                </h3>
+                <p className="text-secondary-light">
+                  Based on your travel style, these destinations are calling your name
+                </p>
+              </div>
+
+              <div className="grid gap-4">
+                {destinations.map((destination, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-3 bg-primary/5 rounded-xl p-4"
+                    className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow"
                   >
-                    <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-secondary">{trait}</span>
+                    <div className="flex items-start gap-4">
+                      <div className="text-4xl flex-shrink-0">🌍</div>
+                      <div className="flex-1">
+                        <h4 className="text-xl font-bold text-secondary mb-1">
+                          {destination.name}
+                        </h4>
+                        <p className="text-secondary-light mb-3">
+                          {destination.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {destination.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="px-3 py-1 bg-neutral-light text-secondary text-sm rounded-full"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+          </QuizResultSection>
 
-            {/* Secondary archetype if blended */}
-            {results.isBlended && results.secondary && (
-              <div className="border-t-2 border-primary/10 pt-8">
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center gap-2 bg-accent/10 rounded-full px-6 py-2 mb-4">
-                    <Award className="w-5 h-5 text-accent" />
-                    <span className="text-accent font-semibold">Bonus Trait</span>
-                  </div>
-                  <h3 className="text-2xl font-bold text-primary mb-2">
-                    {results.secondary.emoji} {results.secondary.name}
-                  </h3>
-                  <p className="text-secondary-light">
-                    You also have strong {results.secondary.name} tendencies!
-                  </p>
+          {/* Section 3: Your Personal Packing List */}
+          <QuizResultSection variant="brand">
+            <div className="space-y-6">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow-md mb-4">
+                  <Luggage className="w-8 h-8 text-accent" />
                 </div>
-              </div>
-            )}
-          </div>
-
-          {/* Packing List CTA */}
-          <div className="bg-gradient-to-r from-accent to-accent/80 rounded-3xl shadow-xl p-8 md:p-10 mb-8 text-white">
-            <div className="flex flex-col md:flex-row items-center gap-6">
-              <div className="flex-shrink-0">
-                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                  <Package className="w-8 h-8 text-white" />
-                </div>
-              </div>
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-bold mb-2">Ready to Pack?</h3>
-                <p className="text-white/90 text-lg">
-                  Now that you know your travel style, create a personalized packing list tailored to your next adventure!
+                <h3 className="text-3xl font-bold text-secondary mb-2">
+                  Your Personal Packing List
+                </h3>
+                <p className="text-secondary-light">
+                  Essential items tailored to your travel style
                 </p>
               </div>
-              <button
-                onClick={goToPackingList}
-                className="flex-shrink-0 bg-white text-accent px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 whitespace-nowrap"
-              >
-                Personalize Your Packing List
-              </button>
+
+              <div className="space-y-4">
+                <div className="bg-white rounded-xl p-5 shadow-md">
+                  <h4 className="font-semibold text-secondary text-lg mb-3 flex items-center gap-2">
+                    <Package className="w-5 h-5 text-accent" />
+                    Top Essentials
+                  </h4>
+                  <ul className="space-y-2">
+                    {packingListTeaser.essentials.map((item, index) => (
+                      <li key={index} className="text-secondary-light flex items-start gap-2">
+                        <span className="text-accent mt-1">✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-white rounded-xl p-5 shadow-md">
+                  <h4 className="font-semibold text-secondary text-lg mb-3">
+                    What You Truly Need
+                  </h4>
+                  <ul className="space-y-2">
+                    {packingListTeaser.whatYouNeed.map((item, index) => (
+                      <li key={index} className="text-secondary-light flex items-start gap-2">
+                        <span className="text-accent mt-1">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-neutral-light rounded-xl p-5">
+                  <h4 className="font-semibold text-secondary text-lg mb-3">
+                    Don't Forget!
+                  </h4>
+                  <ul className="space-y-2">
+                    {packingListTeaser.oftenForgotten.map((item, index) => (
+                      <li key={index} className="text-secondary-light flex items-start gap-2">
+                        <span className="text-accent mt-1">⚠️</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 justify-center pt-4">
+                <QuizActionButton
+                  onClick={restartQuiz}
+                  icon={RotateCcw}
+                  text="Retake Quiz"
+                  variant="secondary"
+                />
+                <QuizActionButton
+                  onClick={goHome}
+                  icon={Home}
+                  text="Back to Home"
+                  variant="primary"
+                />
+              </div>
             </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <button
-              onClick={shareResult}
-              className="flex items-center justify-center gap-3 bg-white border-2 border-primary/20 text-primary px-6 py-4 rounded-2xl font-semibold hover:bg-primary/5 transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              <Share2 className="w-5 h-5" />
-              Share Result
-            </button>
-            <button
-              onClick={shareToInstagramStory}
-              disabled={isGeneratingStory}
-              className="flex items-center justify-center gap-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-4 rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Instagram className="w-5 h-5" />
-              {isGeneratingStory ? 'Generating...' : 'Instagram Story'}
-            </button>
-            <button
-              onClick={restartQuiz}
-              className="flex items-center justify-center gap-3 bg-white border-2 border-accent/20 text-accent px-6 py-4 rounded-2xl font-semibold hover:bg-accent/5 transition-all duration-300 shadow-md hover:shadow-lg"
-            >
-              <RotateCcw className="w-5 h-5" />
-              Retake Quiz
-            </button>
-          </div>
-
-          {/* Home Button */}
-          <div className="text-center">
-            <button
-              onClick={goHome}
-              className="inline-flex items-center gap-2 text-secondary-light hover:text-primary transition-colors duration-300"
-            >
-              <Home className="w-5 h-5" />
-              Back to Home
-            </button>
-          </div>
+          </QuizResultSection>
         </div>
-      </div>
+      </QuizPage>
     );
   }
 
-  // Quiz in progress
-  const progress = ((currentQuestion + 1) / questions.length) * 100;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-white to-accent/5 py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full mb-4 shadow-lg">
-            <Compass className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-primary mb-2">
-            Travel Style Quiz
-          </h1>
-          <p className="text-secondary-light">
-            Discover your unique travel personality
-          </p>
-        </div>
-
-        {/* Progress Bar */}
+    <QuizPage>
+      <QuizCard>
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-medium text-secondary">
-              Question {currentQuestion + 1} of {questions.length}
-            </span>
-            <span className="text-sm font-medium text-primary">
-              {Math.round(progress)}%
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
-            <div
-              className="bg-gradient-to-r from-primary to-accent h-full rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </div>
-
-        {/* Question Card */}
-        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-8">
-          <div className="mb-8">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                <Target className="w-5 h-5 text-primary" />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center">
+                <Compass className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-primary leading-tight">
-                {questions[currentQuestion].question}
-              </h2>
+              <div>
+                <h1 className="text-2xl font-bold text-secondary">Travel Style Quiz</h1>
+                <p className="text-secondary-light text-sm">Discover your travel personality</p>
+              </div>
             </div>
           </div>
+          
+          <QuizProgress 
+            current={currentQuestion + 1} 
+            total={questions.length}
+          />
+        </div>
 
-          {/* Options */}
-          <div key={questionKey} className="space-y-3">
-            {questions[currentQuestion].options.map((option, index) => {
-              const isSelected = selectedAnswer === option.archetype;
-              const showFeedback = showResult && isSelected;
+        <div key={questionKey} className="space-y-6 animate-fade-in-up">
+          <h2 className="text-xl font-semibold text-secondary mb-6">
+            {questions[currentQuestion].question}
+          </h2>
 
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleAnswerSelect(option.archetype)}
-                  disabled={selectedAnswer !== null}
-                  className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-300 ${
-                    showFeedback
-                      ? 'bg-primary border-primary text-white shadow-lg scale-[1.02]'
-                      : isSelected
-                      ? 'bg-primary/5 border-primary/30'
-                      : 'bg-white border-gray-200 hover:border-primary/30 hover:bg-primary/5'
-                  } ${
-                    selectedAnswer !== null && !isSelected
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'cursor-pointer'
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`flex-shrink-0 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-                        showFeedback
-                          ? 'bg-white border-white'
-                          : isSelected
-                          ? 'bg-primary/10 border-primary'
-                          : 'border-gray-300'
-                      }`}
-                    >
-                      {showFeedback && (
-                        <CheckCircle className="w-5 h-5 text-primary" />
-                      )}
-                    </div>
-                    <span
-                      className={`text-lg font-medium ${
-                        showFeedback ? 'text-white' : 'text-secondary'
-                      }`}
-                    >
-                      {option.text}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+          <div className="space-y-3">
+            {questions[currentQuestion].options.map((option, index) => (
+              <QuizOptionButton
+                key={index}
+                text={option.text}
+                onClick={() => handleAnswerSelect(option.archetype)}
+                isSelected={selectedAnswer === option.archetype}
+                isCorrect={showResult && selectedAnswer === option.archetype}
+                disabled={!!selectedAnswer}
+              />
+            ))}
           </div>
         </div>
-
-        {/* Home Button */}
-        <div className="text-center">
-          <button
-            onClick={goHome}
-            className="inline-flex items-center gap-2 text-secondary-light hover:text-primary transition-colors duration-300"
-          >
-            <Home className="w-5 h-5" />
-            Back to Home
-          </button>
-        </div>
-      </div>
-    </div>
+      </QuizCard>
+    </QuizPage>
   );
 }
