@@ -1,62 +1,47 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-17T19:11:15.784Z",
+  "generatedAt": "2026-02-18T16:06:43.979Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 2,
+    "implemented": 0,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the Travel Style Quiz finishing/results page so the three result sections (“Your Travel Style”, “Your Ideal Destinations”, and “Your Personal Packing List”) render as distinct tiles with a filled background using the same background color currently used by the “Your Ideal Destinations” section, and do not render a full-width colored stripe behind the tiles.",
-        "status": "implemented",
+        "summary": "Build the current Draft Version 133 codebase without modifications",
+        "status": "missing",
         "plannedFiles": [
-          "frontend/src/components/quiz/QuizResultSection.tsx",
-          "frontend/src/pages/TravelStyleQuiz.tsx"
+          "frontend/src/App.tsx",
+          "frontend/src/components/Header.tsx",
+          "frontend/src/pages/HomePage.tsx",
+          "frontend/src/pages/AdminDashboard.tsx",
+          "frontend/index.html",
+          "frontend/src/main.tsx"
         ],
-        "matchedFiles": [
-          "frontend/src/components/quiz/QuizResultSection.tsx",
-          "frontend/src/pages/TravelStyleQuiz.tsx"
-        ]
+        "matchedFiles": []
       },
       {
         "id": "REQ-2",
-        "summary": "Make the borders for the three finishing/results section tiles use the same border color and general border treatment as other tiles used elsewhere on the site (consistent thickness, radius, and overall look).",
-        "status": "implemented",
+        "summary": "Deploy the built application to the Internet Computer network for testing",
+        "status": "missing",
         "plannedFiles": [
-          "frontend/src/components/quiz/QuizResultSection.tsx"
+          "frontend/scripts/deploy.ts",
+          "frontend/scripts/deploySteps.ts"
         ],
-        "matchedFiles": [
-          "frontend/src/components/quiz/QuizResultSection.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Adjust the quiz page-level background styling so the Travel Style Quiz finishing/results screen does not appear as a single full-page colored block; ensure only the tiles carry the “Your Ideal Destinations” background color.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/quiz/QuizPage.tsx",
-          "frontend/src/pages/TravelStyleQuiz.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/quiz/QuizPage.tsx",
-          "frontend/src/pages/TravelStyleQuiz.tsx"
-        ]
+        "matchedFiles": []
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
+    "caffeine.lock.json",
     "feature_evidence.json",
-    "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/quiz/QuizPage.tsx",
-    "frontend/src/components/quiz/QuizResultSection.tsx",
-    "frontend/src/pages/TravelStyleQuiz.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

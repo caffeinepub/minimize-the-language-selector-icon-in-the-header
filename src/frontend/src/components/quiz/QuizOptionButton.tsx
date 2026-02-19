@@ -9,6 +9,8 @@ interface QuizOptionButtonProps {
   isCorrect?: boolean;
   isIncorrect?: boolean;
   showFeedback?: boolean;
+  variant?: 'default' | 'brand';
+  animated?: boolean;
 }
 
 export function QuizOptionButton({
@@ -18,28 +20,35 @@ export function QuizOptionButton({
   isSelected = false,
   isCorrect = false,
   isIncorrect = false,
-  showFeedback = false
+  showFeedback = false,
+  variant = 'default',
+  animated = false
 }: QuizOptionButtonProps) {
   const getButtonClasses = () => {
     const baseClasses = 'w-full p-4 rounded-xl text-left transition-all duration-200 flex items-center justify-between';
+    const animationClass = animated ? 'animate-fade-in-up' : '';
     
     if (showFeedback && isCorrect) {
-      return `${baseClasses} bg-green-100 border-2 border-green-500 text-green-900`;
+      return `${baseClasses} ${animationClass} bg-green-100 border-2 border-green-500 text-green-900`;
     }
     
     if (showFeedback && isIncorrect) {
-      return `${baseClasses} bg-red-100 border-2 border-red-500 text-red-900`;
+      return `${baseClasses} ${animationClass} bg-red-100 border-2 border-red-500 text-red-900`;
     }
     
     if (isSelected) {
-      return `${baseClasses} bg-accent text-white border-2 border-accent`;
+      return `${baseClasses} ${animationClass} bg-accent text-white border-2 border-accent`;
     }
     
     if (disabled) {
-      return `${baseClasses} bg-neutral-light border-2 border-neutral text-secondary-light cursor-not-allowed`;
+      return `${baseClasses} ${animationClass} bg-neutral-light border-2 border-neutral text-secondary-light cursor-not-allowed`;
     }
     
-    return `${baseClasses} bg-white border-2 border-neutral hover:border-accent hover:bg-accent/5 cursor-pointer`;
+    if (variant === 'brand') {
+      return `${baseClasses} ${animationClass} bg-white border-2 border-neutral hover:border-accent hover:bg-accent/5 cursor-pointer`;
+    }
+    
+    return `${baseClasses} ${animationClass} bg-white border-2 border-neutral hover:border-accent hover:bg-accent/5 cursor-pointer`;
   };
 
   return (

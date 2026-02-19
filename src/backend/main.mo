@@ -438,7 +438,7 @@ actor {
 
     var contactSubmissions = textMap.empty<ContactSubmission>();
 
-    public func submitContactForm(submission : ContactSubmission) : async () {
+    public shared func submitContactForm(submission : ContactSubmission) : async () {
         contactSubmissions := textMap.put(contactSubmissions, submission.id, submission);
     };
 
@@ -478,7 +478,7 @@ actor {
 
     var emailCaptures = textMap.empty<EmailCapture>();
 
-    public func captureEmail(capture : EmailCapture) : async () {
+    public shared func captureEmail(capture : EmailCapture) : async () {
         emailCaptures := textMap.put(emailCaptures, capture.email, capture);
     };
 
@@ -773,7 +773,10 @@ actor {
         sortedFailures;
     };
 
-    public shared func registerDeploymentFailure() : async () {
+    public shared ({ caller }) func registerDeploymentFailure() : async () {
+        if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+            Debug.trap("Unauthorized: Only admins can register deployment failures");
+        };
         let failure : DeploymentFailure = {
             timestamp = Time.now();
             error_message = "Transient deployment failure, logs rotating";
@@ -797,7 +800,10 @@ actor {
         sortedFailures;
     };
 
-    public shared func registerBuildFailure() : async () {
+    public shared ({ caller }) func registerBuildFailure() : async () {
+        if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+            Debug.trap("Unauthorized: Only admins can register build failures");
+        };
         let failure : BuildFailure = {
             timestamp = Time.now();
             error_message = "Transient build failure, logs rotating";
@@ -808,4 +814,3 @@ actor {
         buildFailures := natMap.put(buildFailures, 0, failure);
     };
 };
-

@@ -1,61 +1,67 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Travel Style Quiz results: tile-only brand background and consistent borders",
+  "title": "Build and Deploy Draft Version 133",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Render the three results sections as distinct tiles/cards with the brand background color applied only to the tiles (no full-width colored stripe).",
+      "summary": "Build the current Draft Version 133 codebase without modifications",
       "acceptanceCriteria": [
-        "On the Travel Style Quiz finishing/results screen, there is no full-width colored band/stripe behind any of the three result sections.",
-        "Each of the three result sections is visually presented as a tile/card with a filled background color matching the “Your Ideal Destinations” section background color.",
-        "The tile background color is applied to the tile/card itself (not the entire page width)."
+        "Draft Version 133 is built successfully",
+        "All existing functionality remains intact",
+        "The admin button is visible in the header as it was in Version 133"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/quiz/QuizResultSection.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Move the 'brand' background treatment from the full-width wrapper to the inner card container so only the tile is filled (no full-width stripe). Keep spacing/container layout so each section reads as its own tile."
+          "description": "Verify the App.tsx routing structure is intact with all existing routes (home, blog, shop, admin, tools pages) and hash-based navigation functioning correctly"
         },
         {
-          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
+          "path": "frontend/src/components/Header.tsx",
           "operation": "modify",
-          "description": "Ensure all three results sections (“Your Travel Style”, “Your Ideal Destinations”, “Your Personal Packing List”) use the same 'brand' tile variant/background, and confirm the sections are rendered as separate stacked tiles (not visually merging into a single band)."
+          "description": "Verify the Header component displays the admin button correctly when user is authenticated and has admin role, ensuring navigation links for home, blog, shop, and tools are present"
+        },
+        {
+          "path": "frontend/src/pages/HomePage.tsx",
+          "operation": "modify",
+          "description": "Verify the HomePage layout renders all sections (hero, blog, shop, contact) correctly with proper component integration and blog post click handling"
+        },
+        {
+          "path": "frontend/src/pages/AdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Verify the AdminDashboard is accessible and displays all management interfaces (blog posts, users, media, tools, settings) with proper query hooks and upload components"
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Verify the base HTML structure is correct with proper root div and main TypeScript entry file reference"
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "operation": "modify",
+          "description": "Verify React app initialization with React Query and Internet Identity providers is functioning correctly"
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Make the three results tiles use the same border color and general border treatment as other site tiles (radius/thickness/weight).",
+      "summary": "Deploy the built application to the Internet Computer network for testing",
       "acceptanceCriteria": [
-        "All three finishing/results tiles use the same border color as the site’s existing tile border styling.",
-        "Border styling is consistent across the three tiles (same radius, thickness, and visual weight)."
+        "Application is deployed and accessible via canister URL",
+        "All frontend assets load correctly",
+        "Backend canister responds to queries"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/quiz/QuizResultSection.tsx",
+          "path": "frontend/scripts/deploy.ts",
           "operation": "modify",
-          "description": "Update the results tile/card container styling to match existing tile conventions used elsewhere (e.g., rounded-xl + subtle shadow + border using the site’s existing tile border color such as border-neutral-light), and apply it consistently for all variants."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Adjust results screen page-level background so the screen is not a single full-page colored block; confine brand color to tiles only and keep clean spacing around tiles.",
-      "acceptanceCriteria": [
-        "The finishing/results screen background behind the tiles is not the same filled brand/section color; instead, the color is confined to the tiles.",
-        "Spacing/padding around the tiles remains clean and consistent after the background change."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/quiz/QuizPage.tsx",
-          "operation": "modify",
-          "description": "Change the quiz page wrapper background so the overall finishing/results screen is not rendered as a full-page brand-colored block; use the site’s normal page background and preserve existing vertical spacing/padding."
+          "description": "Verify the deployment script runs backend binding generation, frontend build, and canister deployment with retry logic and logging to deploy-logs directory"
         },
         {
-          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
+          "path": "frontend/scripts/deploySteps.ts",
           "operation": "modify",
-          "description": "Verify the finishing/results layout still has consistent spacing between tiles and around the results content after the QuizPage background change (adjust only layout classes in this page if needed)."
+          "description": "Verify deployment step utilities handle logging, output capture, and transient failure detection correctly for reliable deployment execution"
         }
       ]
     }

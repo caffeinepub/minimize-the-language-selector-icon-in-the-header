@@ -1,47 +1,30 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Update site styling so section tiles use the 'Your Ideal Destinations' background color and borders match the existing tile border color used elsewhere on the website.",
-  "architectural_notes": [
-    "Use existing design tokens/colors already present on the site: tile background should match the 'Your Ideal Destinations' section background; tile borders should match the current border styling used by other tiles elsewhere on the website."
-  ],
+  "summary": "New project",
+  "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": true,
-  "existing_features": [
-    {
-      "id": "feature-update-the-travel-style-quiz-finishing-results-page-so-the-three-result-sections-your-travel-style-your-ideal-destinations-and-your-personal-packing-list-render-as-distinct-tiles-with-a-filled-background-using-the-same-background-color-currently-used-by-the-your-ideal-destinations-section-and-do-not-render-a-full-width-colored-stripe-behind-the-tiles",
-      "title": "Update the Travel Style Quiz finishing/results page so the three result sections (“Your Travel Style”, “Your Ideal Destinations”, and “Your Personal Packing List”) render as distinct tiles with a filled background using the same background color currently used by the “Your Ideal Destinations” section, and do not render a full-width colored stripe behind the tiles.",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-make-the-borders-for-the-three-finishing-results-section-tiles-use-the-same-border-color-and-general-border-treatment-as-other-tiles-used-elsewhere-on-the-site-consistent-thickness-radius-and-overall-look",
-      "title": "Make the borders for the three finishing/results section tiles use the same border color and general border treatment as other tiles used elsewhere on the site (consistent thickness, radius, and overall look).",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-adjust-the-quiz-page-level-background-styling-so-the-travel-style-quiz-finishing-results-screen-does-not-appear-as-a-single-full-page-colored-block-ensure-only-the-tiles-carry-the-your-ideal-destinations-background-color",
-      "title": "Adjust the quiz page-level background styling so the Travel Style Quiz finishing/results screen does not appear as a single full-page colored block; ensure only the tiles carry the “Your Ideal Destinations” background color.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    }
-  ],
+  "isFixRequest": false,
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Adjust section tiles styling: use 'Your Ideal Destinations' background color for all tiles; remove full-width stripe backgrounds; set borders to match existing tile border styling across the site.",
-      "reqIds": [],
-      "status": "in_progress"
+      "summary": "Build the current Draft Version 133 codebase without modifications",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Deploy the built application to the Internet Computer network for testing",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
     }
   ],
-  "projectName": "TravelButts Quiz",
+  "projectName": "Build and deploy Draft Version 133",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

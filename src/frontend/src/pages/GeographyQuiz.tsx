@@ -218,9 +218,10 @@ export default function GeographyQuiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [totalQuestions] = useState(15); // Increased from 10 to 15 for more challenge
+  const [totalQuestions] = useState(15);
   const [flagImageError, setFlagImageError] = useState(false);
   const [isGeneratingStory, setIsGeneratingStory] = useState(false);
+  const [questionKey, setQuestionKey] = useState(0);
   const { data: logoUrl } = useFileUrl('assets/travel-butts-logo.png');
 
   const generateRandomOptions = (correctAnswer: string, type: 'flag' | 'capital'): string[] => {
@@ -229,7 +230,6 @@ export default function GeographyQuiz() {
       ? countries.map(c => c.name).filter(name => name !== correctAnswer)
       : countries.map(c => c.capital).filter(capital => capital !== correctAnswer);
     
-    // Add 2 random wrong options
     while (options.length < 3) {
       const randomOption = availableOptions[Math.floor(Math.random() * availableOptions.length)];
       if (!options.includes(randomOption)) {
@@ -237,7 +237,6 @@ export default function GeographyQuiz() {
       }
     }
     
-    // Shuffle options
     return options.sort(() => Math.random() - 0.5);
   };
 
@@ -270,6 +269,7 @@ export default function GeographyQuiz() {
     setShowResult(false);
     setQuizCompleted(false);
     setFlagImageError(false);
+    setQuestionKey(0);
   };
 
   const handleAnswerSelect = (answer: string) => {
@@ -282,7 +282,6 @@ export default function GeographyQuiz() {
       setScore(score + 1);
     }
     
-    // Auto-advance after 2.5 seconds (slightly longer for harder questions)
     setTimeout(() => {
       if (questionNumber >= totalQuestions) {
         setQuizCompleted(true);
@@ -292,6 +291,7 @@ export default function GeographyQuiz() {
         setSelectedAnswer(null);
         setShowResult(false);
         setFlagImageError(false);
+        setQuestionKey(prev => prev + 1);
       }
     }, 2500);
   };
@@ -323,11 +323,9 @@ export default function GeographyQuiz() {
         url: `${window.location.origin}#geography-quiz`
       }).catch(console.error);
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareText).then(() => {
         showToast('Quiz result copied to clipboard! You can now paste it anywhere to share.', 'success');
       }).catch(() => {
-        // Final fallback: show share text in alert
         alert(`Share your result:\n\n${shareText}`);
       });
     }
@@ -358,7 +356,6 @@ export default function GeographyQuiz() {
   };
 
   const getFlagImageUrl = (countryCode: string): string => {
-    // Using HTTPS flagcdn.com as the primary source for flag images with higher resolution
     return `https://flagcdn.com/w320/${countryCode.toLowerCase()}.png`;
   };
 
@@ -396,17 +393,17 @@ export default function GeographyQuiz() {
     }
 
     return (
-      <QuizPage>
-        <QuizCard className="text-center">
-          <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
+      <QuizPage variant="brand">
+        <QuizCard variant="white" animated className="text-center">
+          <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
             <Trophy className="w-10 h-10 text-white" />
           </div>
           
-          <h1 className="text-3xl font-bold text-secondary mb-4">Quiz Complete!</h1>
+          <h1 className="text-3xl font-bold text-secondary mb-4 animate-fade-in-up">Quiz Complete!</h1>
           
-          <div className="text-6xl mb-4">{emoji}</div>
+          <div className="text-6xl mb-4 animate-pulse">{emoji}</div>
           
-          <div className="bg-neutral-light rounded-xl p-6 mb-6">
+          <div className="bg-neutral-light rounded-xl p-6 mb-6 animate-fade-in-up">
             <div className="text-4xl font-bold text-accent mb-2">
               {score}/{totalQuestions}
             </div>
@@ -415,20 +412,20 @@ export default function GeographyQuiz() {
             </div>
           </div>
           
-          <p className="text-lg text-secondary mb-8">{message}</p>
+          <p className="text-lg text-secondary mb-8 animate-fade-in-up">{message}</p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
             <QuizActionButton
               onClick={shareResult}
               icon={Share2}
               text="Share Your Result"
-              variant="primary"
+              variant="brand-primary"
             />
 
             <QuizActionButton
               onClick={shareToInstagramStory}
               icon={Instagram}
-              text={isGeneratingStory ? 'Generating...' : 'Instagram Story'}
+              text={isGeneratingStory ? "Generating..." : "Instagram Story"}
               variant="gradient"
               disabled={isGeneratingStory}
             />
@@ -437,14 +434,14 @@ export default function GeographyQuiz() {
               onClick={startQuiz}
               icon={RotateCcw}
               text="Try Again"
-              variant="secondary"
+              variant="brand-secondary"
             />
 
             <QuizActionButton
               onClick={goHome}
               icon={Home}
               text="Home"
-              variant="secondary"
+              variant="brand-secondary"
             />
           </div>
         </QuizCard>
@@ -454,78 +451,113 @@ export default function GeographyQuiz() {
 
   if (!currentQuestion) {
     return (
-      <QuizPage>
-        <QuizCard className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent mx-auto"></div>
-          <p className="mt-4 text-secondary-light">Loading quiz...</p>
+      <QuizPage variant="brand">
+        <QuizCard variant="white" animated>
+          <div className="text-center">
+            <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+              <MapPin className="w-8 h-8 text-white" />
+            </div>
+            <p className="text-secondary">Loading quiz...</p>
+          </div>
         </QuizCard>
       </QuizPage>
     );
   }
 
   return (
-    <QuizPage>
-      <QuizCard>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-2">
-            {currentQuestion.type === 'flag' ? (
-              <Flag className="w-6 h-6 text-accent" />
-            ) : (
-              <MapPin className="w-6 h-6 text-accent" />
-            )}
-            <h1 className="text-2xl font-bold text-secondary">Geography Quiz</h1>
-          </div>
-          <div className="flex items-center space-x-2 text-accent">
-            <Target className="w-5 h-5" />
-            <span className="font-semibold">{score}/{totalQuestions}</span>
-          </div>
-        </div>
-
-        <QuizProgress current={questionNumber} total={totalQuestions} />
-
-        {currentQuestion.type === 'flag' ? (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-secondary mb-4 text-center">
-              Which country does this flag belong to?
-            </h2>
-            <div className="flex justify-center mb-6">
-              {!flagImageError ? (
-                <img
-                  src={getFlagImageUrl(currentQuestion.country.code)}
-                  alt="Country flag"
-                  className="w-64 h-auto rounded-lg shadow-md"
-                  onError={handleFlagImageError}
-                />
-              ) : (
-                <div className="w-64 h-40 bg-neutral-light rounded-lg flex items-center justify-center">
-                  <Flag className="w-16 h-16 text-neutral" />
-                </div>
-              )}
+    <QuizPage variant="brand">
+      <div key={questionKey}>
+        <QuizCard variant="white" animated>
+          <div className="flex items-center justify-between mb-6 animate-fade-in-up">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+                {currentQuestion.type === 'flag' ? (
+                  <Flag className="w-5 h-5 text-white" />
+                ) : (
+                  <MapPin className="w-5 h-5 text-white" />
+                )}
+              </div>
+              <h2 className="text-xl font-bold text-secondary">Geography Quiz</h2>
+            </div>
+            <div className="flex items-center space-x-2 text-accent">
+              <Target className="w-5 h-5" />
+              <span className="font-bold">{score}/{questionNumber - 1}</span>
             </div>
           </div>
-        ) : (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-secondary mb-4 text-center">
-              What is the capital of {currentQuestion.country.name}?
-            </h2>
-          </div>
-        )}
 
-        <div className="space-y-3">
-          {currentQuestion.options.map((option, index) => (
-            <QuizOptionButton
-              key={index}
-              text={option}
-              onClick={() => handleAnswerSelect(option)}
-              disabled={!!selectedAnswer}
-              isSelected={selectedAnswer === option}
-              isCorrect={showResult && option === currentQuestion.correctAnswer}
-              isIncorrect={showResult && selectedAnswer === option && option !== currentQuestion.correctAnswer}
-              showFeedback={showResult}
-            />
-          ))}
-        </div>
-      </QuizCard>
+          <QuizProgress 
+            current={questionNumber} 
+            total={totalQuestions}
+            variant="brand"
+            animated
+          />
+
+          <div className="mb-8 animate-fade-in-up">
+            {currentQuestion.type === 'flag' ? (
+              <div>
+                <h3 className="text-2xl font-bold text-secondary mb-6 text-center">
+                  Which country does this flag belong to?
+                </h3>
+                <div className="flex justify-center mb-8">
+                  {!flagImageError ? (
+                    <img
+                      src={getFlagImageUrl(currentQuestion.country.code)}
+                      alt="Country flag"
+                      className="w-64 h-40 object-contain border-2 border-neutral rounded-lg shadow-md"
+                      onError={handleFlagImageError}
+                    />
+                  ) : (
+                    <div className="w-64 h-40 bg-neutral-light border-2 border-neutral rounded-lg shadow-md flex items-center justify-center">
+                      <Flag className="w-16 h-16 text-accent" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h3 className="text-2xl font-bold text-secondary mb-6 text-center">
+                  What is the capital of {currentQuestion.country.name}?
+                </h3>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-3">
+            {currentQuestion.options.map((option, index) => (
+              <QuizOptionButton
+                key={index}
+                text={option}
+                onClick={() => handleAnswerSelect(option)}
+                disabled={!!selectedAnswer}
+                isSelected={selectedAnswer === option}
+                isCorrect={showResult && option === currentQuestion.correctAnswer}
+                isIncorrect={showResult && selectedAnswer === option && option !== currentQuestion.correctAnswer}
+                showFeedback={showResult}
+                variant="brand"
+                animated
+              />
+            ))}
+          </div>
+
+          {showResult && (
+            <div className="mt-6 p-4 bg-neutral-light rounded-lg text-center animate-fade-in-up">
+              {selectedAnswer === currentQuestion.correctAnswer ? (
+                <p className="text-accent font-semibold">
+                  ✓ Correct! {currentQuestion.type === 'flag' 
+                    ? `This is the flag of ${currentQuestion.country.name}.` 
+                    : `The capital of ${currentQuestion.country.name} is ${currentQuestion.country.capital}.`}
+                </p>
+              ) : (
+                <p className="text-red-600 font-semibold">
+                  ✗ Incorrect. {currentQuestion.type === 'flag' 
+                    ? `This is the flag of ${currentQuestion.country.name}.` 
+                    : `The capital of ${currentQuestion.country.name} is ${currentQuestion.country.capital}.`}
+                </p>
+              )}
+            </div>
+          )}
+        </QuizCard>
+      </div>
     </QuizPage>
   );
 }
