@@ -1,0 +1,73 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-19T12:04:16.550Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-6",
+        "summary": "Add image upload capability in the admin panel Travel Style Quiz section, allowing admins to upload one Instagram story base image per travel style archetype",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/QuizManager.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/QuizManager.tsx",
+          "frontend/src/hooks/useQueries.ts"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Generate Instagram story image by overlaying travel style name and description centered on the uploaded base image using Gotham Medium font when a user completes the travel style quiz",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/utils/instagramStoryGenerator.ts",
+          "frontend/src/pages/TravelStyleQuiz.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/utils/instagramStoryGenerator.ts",
+          "frontend/src/pages/TravelStyleQuiz.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Display the generated Instagram story image in the first tile of the quiz results page, allowing users to download and share it on Instagram",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/TravelStyleQuiz.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/TravelStyleQuiz.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
+    "build-request.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/QuizManager.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/pages/TravelStyleQuiz.tsx",
+    "frontend/src/utils/instagramStoryGenerator.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

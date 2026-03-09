@@ -1,0 +1,90 @@
+{
+  "kind": "build_request",
+  "title": "Add custom Instagram story images for travel style quiz results",
+  "projectName": "Travel Butts",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-6",
+      "text": "Add image upload capability in the admin panel Travel Style Quiz section, allowing admins to upload one Instagram story base image per travel style archetype",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-1",
+          "msg-3",
+          "msg-5"
+        ],
+        "quotes": [
+          "ik wil ze uploaden in het admin panel bij de travel styles quiz",
+          "begin maar met per travel style 1 afbeelding"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Admin panel includes upload interface in the Travel Style Quiz management section",
+        "Each travel style archetype (Thrill Seeker, Culture Connoisseur, Chill Escapist, etc.) has an upload field for one base image",
+        "Uploaded images are stored in the backend and associated with their respective travel style",
+        "Image upload supports common formats (JPG, PNG, WebP) with appropriate size validation"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Generate Instagram story image by overlaying travel style name and description centered on the uploaded base image using Gotham Medium font when a user completes the travel style quiz",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3",
+          "msg-7"
+        ],
+        "quotes": [
+          "ik upload de image jij plaatst de tekst in Gotham medium er overheen wanneer de quiz is voldaan",
+          "Wanneer een gebruiker de quiz voltooit, plaats ik de travel style naam + beschrijving in Gotham Medium gecentreerd over de geüploade afbeelding"
+        ]
+      },
+      "acceptanceCriteria": [
+        "After quiz completion, the system retrieves the admin-uploaded base image for the user's primary travel style",
+        "Travel style name and description are rendered centered over the base image using Gotham Medium font",
+        "Text is properly positioned and styled for readability against the base image",
+        "Generated image maintains Instagram story dimensions (1080x1920)",
+        "If no custom image is uploaded for a travel style, fall back to default Instagram story generation"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Display the generated Instagram story image in the first tile of the quiz results page, allowing users to download and share it on Instagram",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-7",
+          "msg-9"
+        ],
+        "quotes": [
+          "De gegenereerde afbeelding verschijnt in de eerste tile van de quiz resultaten, waar gebruikers deze kunnen downloaden om te delen op Instagram",
+          "het mag gewoon in de eerste tile geplaatst worden"
+        ]
+      },
+      "acceptanceCriteria": [
+        "First tile in quiz results displays the generated Instagram story image with custom uploaded background",
+        "Users can download the generated image for sharing on Instagram",
+        "Download functionality works consistently across devices",
+        "Image quality is preserved during download"
+      ]
+    }
+  ],
+  "constraints": [
+    "Use the existing instagramStoryGenerator.ts utility and extend it to support custom uploaded background images",
+    "Do not modify the quiz flow or question logic in TravelStyleQuiz.tsx",
+    "Maintain the existing travel style archetypes structure",
+    "Store uploaded images using the existing file storage registry pattern in backend/main.mo"
+  ],
+  "nonGoals": [
+    "Multiple image variants per travel style",
+    "Dynamic text positioning or custom text styling beyond Gotham Medium centered",
+    "Editing or removing the existing default Instagram story generation",
+    "Adding animation or interactive elements to the Instagram story image",
+    "Supporting Instagram story upload directly from the app"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

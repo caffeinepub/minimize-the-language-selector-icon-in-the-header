@@ -1,0 +1,69 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Add custom Instagram story images for travel style quiz results",
+  "requirements": [
+    {
+      "id": "REQ-6",
+      "summary": "Add image upload capability in the admin panel Travel Style Quiz section, allowing admins to upload one Instagram story base image per travel style archetype",
+      "acceptanceCriteria": [
+        "Admin panel includes upload interface in the Travel Style Quiz management section",
+        "Each travel style archetype (Thrill Seeker, Culture Connoisseur, Chill Escapist, etc.) has an upload field for one base image",
+        "Uploaded images are stored in the backend and associated with their respective travel style",
+        "Image upload supports common formats (JPG, PNG, WebP) with appropriate size validation"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/QuizManager.tsx",
+          "operation": "modify",
+          "description": "Add image upload interface to the Travel Style Quiz section. For each travel style archetype, add an upload field that allows admins to upload one base image. Use the blob-storage component via useFileUpload hook to handle file uploads. Verify the component's usage instructions before implementing. Display the current uploaded image if one exists (using the baseImage field from TravelStyle). Include file validation for JPG, PNG, WebP formats with appropriate size limits. Wire the uploaded image path to the backend using the updateTravelStyle mutation hook that updates the baseImage field."
+        },
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add mutation hook for updating travel style base images. Create useUpdateTravelStyle mutation that calls the backend updateTravelStyle method with TravelStyleUpdate payload including name, description, and baseImage path. Ensure the mutation invalidates the getAllTravelStyles query cache after successful update."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Generate Instagram story image by overlaying travel style name and description centered on the uploaded base image using Gotham Medium font when a user completes the travel style quiz",
+      "acceptanceCriteria": [
+        "After quiz completion, the system retrieves the admin-uploaded base image for the user's primary travel style",
+        "Travel style name and description are rendered centered over the base image using Gotham Medium font",
+        "Text is properly positioned and styled for readability against the base image",
+        "Generated image maintains Instagram story dimensions (1080x1920)",
+        "If no custom image is uploaded for a travel style, fall back to default Instagram story generation"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/instagramStoryGenerator.ts",
+          "operation": "modify",
+          "description": "Extend the generateInstagramStory function to support custom uploaded background images. Add a new parameter customBackgroundUrl that accepts a URL to the admin-uploaded base image. When customBackgroundUrl is provided, load the image and use it as the canvas background instead of the default gradient/pattern backgrounds. Render the travel style name and description text centered over the custom background image using Gotham Medium font. Ensure text is properly positioned and styled for readability against any background image. If customBackgroundUrl is not provided or fails to load, fall back to the existing default Instagram story generation logic. Maintain the 1080x1920 Instagram story dimensions for all generated images."
+        },
+        {
+          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
+          "operation": "modify",
+          "description": "Update the quiz completion flow to use custom uploaded base images for Instagram story generation. After quiz completion, fetch the TravelStyle data for the user's primary archetype using the getAllTravelStyles query. Check if the TravelStyle has a baseImage field populated. If baseImage exists, use the useFileUrl hook from blob-storage to get the file URL for the custom image. Pass this URL to the generateInstagramStory function as the customBackgroundUrl parameter. If no baseImage exists for the travel style, pass undefined to generateInstagramStory to trigger the default fallback behavior. Verify the blob-storage component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Display the generated Instagram story image in the first tile of the quiz results page, allowing users to download and share it on Instagram",
+      "acceptanceCriteria": [
+        "First tile in quiz results displays the generated Instagram story image with custom uploaded background",
+        "Users can download the generated image for sharing on Instagram",
+        "Download functionality works consistently across devices",
+        "Image quality is preserved during download"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/TravelStyleQuiz.tsx",
+          "operation": "modify",
+          "description": "Update the quiz results display to show the generated Instagram story image in the first results tile. Ensure the generated story image (with custom uploaded background if available) is rendered prominently in the first tile section. Add a download button or interface element that allows users to download the generated image. Implement download functionality that preserves image quality and works consistently across desktop and mobile devices. Use a descriptive filename for the downloaded image (e.g., travel-style-result.png). Ensure the download UI is intuitive and accessible to all users."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-image-upload-capability-in-the-admin-panel-travel-style-quiz-section-allowing-admins-to-upload-one-instagram-story-base-image-per-travel-style-archetype",
+      "featureTitle": "Add image upload capability in the admin panel Travel Style Quiz section, allowing admins to upload one Instagram story base image per travel style archetype",
+      "files": [
+        "frontend/src/components/QuizManager.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "blob-storage@1.1.2",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-instagram-story-image-by-overlaying-travel-style-name-and-description-centered-on-the-uploaded-base-image-using-gotham-medium-font-when-a-user-completes-the-travel-style-quiz",
+      "featureTitle": "Generate Instagram story image by overlaying travel style name and description centered on the uploaded base image using Gotham Medium font when a user completes the travel style quiz",
+      "files": [
+        "frontend/src/pages/TravelStyleQuiz.tsx",
+        "frontend/src/utils/instagramStoryGenerator.ts"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "blob-storage@1.1.2",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-display-the-generated-instagram-story-image-in-the-first-tile-of-the-quiz-results-page-allowing-users-to-download-and-share-it-on-instagram",
+      "featureTitle": "Display the generated Instagram story image in the first tile of the quiz results page, allowing users to download and share it on Instagram",
+      "files": [
+        "frontend/src/pages/TravelStyleQuiz.tsx"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "blob-storage@1.1.2",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

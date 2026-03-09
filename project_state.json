@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Travel style quiz app with Instagram story sharing feature",
+  "architectural_notes": [
+    "Travel style quiz generates personalized Instagram story images",
+    "Admin can upload base images per travel style for Instagram stories",
+    "Text overlay system uses Gotham Medium font, centered positioning"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-add-image-upload-capability-in-the-admin-panel-travel-style-quiz-section-allowing-admins-to-upload-one-instagram-story-base-image-per-travel-style-archetype",
+      "title": "Add image upload capability in the admin panel Travel Style Quiz section, allowing admins to upload one Instagram story base image per travel style archetype",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-instagram-story-image-by-overlaying-travel-style-name-and-description-centered-on-the-uploaded-base-image-using-gotham-medium-font-when-a-user-completes-the-travel-style-quiz",
+      "title": "Generate Instagram story image by overlaying travel style name and description centered on the uploaded base image using Gotham Medium font when a user completes the travel style quiz",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-generated-instagram-story-image-in-the-first-tile-of-the-quiz-results-page-allowing-users-to-download-and-share-it-on-instagram",
+      "title": "Display the generated Instagram story image in the first tile of the quiz results page, allowing users to download and share it on Instagram",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-3",
+      "summary": "Admin panel: Upload Instagram story images per travel style in Travel Style Quiz section",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Generate Instagram story with uploaded image + centered text overlay (travel style name + description) using Gotham Medium font when quiz is completed",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Display generated Instagram story image in first tile of quiz results for users to download and share",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Build and deploy Draft Version 133",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
